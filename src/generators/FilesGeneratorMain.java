@@ -26,8 +26,7 @@ public class FilesGeneratorMain {
 
 	private static void generateFiles(int n, int size) throws FileNotFoundException {
 		String parentDirectory = "inputFiles";   // must exist in current directory
-		DataGenerator dg = new DataGenerator(n, size);
-		Object[] setsLists = dg.generateData();  
+		 
 
 		PrintWriter paramsFile = new PrintWriter(new File(parentDirectory, "parameters.txt")); 
 		paramsFile.println(n);   // save parameter n
@@ -36,7 +35,8 @@ public class FilesGeneratorMain {
 		for (int i=0; i<n; i++){
 			String fileName = "data_" + i + ".txt"; 
 			PrintWriter out = new PrintWriter(new File(parentDirectory, fileName)); 
-			out.println(setsLists[i]);
+			for(int j = 0 )
+			out.println();
 			out.close();
 		}
 	}
