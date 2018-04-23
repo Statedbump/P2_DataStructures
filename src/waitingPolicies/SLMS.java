@@ -10,6 +10,7 @@ public class SLMS {
 	private LinkedQueue<Customer> arrivalQueue;
 	private LinkedQueue<Customer>departureQueue;
 	private ArrayQueue<Customer>serviceQueue;
+	private int servedTime;
 
 	public SLMS( LinkedQueue<Customer> arrivalQueue, ArrayQueue<Customer>serviceQueue, LinkedQueue<Customer>departureQueue) {
 		this.arrivalQueue = arrivalQueue;
@@ -22,9 +23,14 @@ public class SLMS {
 	public void performService(int numOfServ) {
 		
 		while(!this.arrivalQueue.isEmpty() || !this.serviceQueue.isEmpty()){
+			
 			if(!this.arrivalQueue.isEmpty()) {
-				
+				Customer c = this.arrivalQueue.first();
+				if(c.getArrival()>= servedTime && this.serviceQueue.size()!= numOfServ) {
+					this.serviceQueue.enqueue(this.arrivalQueue.dequeue());
+				}
 			}
+			
 			if(!serviceQueue.isEmpty()) {
 				Customer c1 = this.serviceQueue.first();
 				c1.setServiceTime(c1.getServiceTime()-1);
@@ -38,6 +44,12 @@ public class SLMS {
 			
 		}
 		
+		servedTime++;
 	}
-	
+	public Queue<Customer> getServicedEndedQueue(){
+		return departureQueue;
+	}
+	public int getsServedTime() {
+		return servedTime;
+	}
 }
