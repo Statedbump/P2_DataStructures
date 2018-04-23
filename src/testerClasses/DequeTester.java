@@ -1,6 +1,6 @@
-package TesterClases;
+package testerClasses;
 
-import Implementations.LinkedDeque;
+import implementations.LinkedDeque;
 import interfaces.Deque;
 
 public class DequeTester {

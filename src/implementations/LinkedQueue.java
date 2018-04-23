@@ -1,4 +1,4 @@
-package Implementations;
+package implementations;
 
 import interfaces.Queue;
 
