@@ -31,8 +31,8 @@ public class FilesGeneratorMain {
 
 	private static void generateFiles(int n, int m) throws FileNotFoundException {
 		String parentDirectory = "inputFiles";   // must exist in current directory
-		Random rand = new Random(); 
 
+		Random rand = new Random(); 
 		PrintWriter paramsFile = new PrintWriter(new File(parentDirectory, "parameters.txt")); 
 		paramsFile.println(n);   // save parameter n
 		paramsFile.println(m);	 // save parameter m
@@ -40,6 +40,7 @@ public class FilesGeneratorMain {
 		PrintWriter out = new PrintWriter(new File(parentDirectory, "dataFiles.txt")); 
 		for (int i=0; i<n; i++){
 			String fileName = "data_" + i + ".txt"; 
+
 			PrintWriter out2 = new PrintWriter(new File(parentDirectory, fileName)); 
 			for (int j=0; j<m;j++){
 				out2.print(rand.nextInt(10));
@@ -48,6 +49,7 @@ public class FilesGeneratorMain {
 			}
 			out.println("data_" + i + ".txt");
 			out2.close();
+
 		}
 		out.close();
 	}
