@@ -9,10 +9,10 @@ public class SLMS {
 	
 	private LinkedQueue<Customer> arrivalQueue;
 	private LinkedQueue<Customer>departureQueue;
-	private ArrayQueue<Customer>serviceQueue;
+	private LinkedQueue<Customer>serviceQueue;
 	private int servedTime;
 
-	public SLMS( LinkedQueue<Customer> arrivalQueue, ArrayQueue<Customer>serviceQueue, LinkedQueue<Customer>departureQueue) {
+	public SLMS( LinkedQueue<Customer> arrivalQueue, LinkedQueue<Customer>serviceQueue, LinkedQueue<Customer>departureQueue) {
 		this.arrivalQueue = arrivalQueue;
 		this.departureQueue = departureQueue;
 		this.serviceQueue = serviceQueue;

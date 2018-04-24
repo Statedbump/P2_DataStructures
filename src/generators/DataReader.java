@@ -1,75 +1,131 @@
-
 package generators;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
+
 import customers.Customer;
+import waitingPolicies.SLMS;
 import implementations.ArrayQueue;
 import implementations.LinkedQueue;
 
-public class DataReader {
-	public static void main(String[] args) {
-		LinkedQueue<Customer> arrivalQ= new LinkedQueue<>();
-		ArrayQueue<Customer> serviceQ = new ArrayQueue<>();
-		ArrayQueue<Customer> departureQ = new ArrayQueue<>();
-		int n;    // number of data generators (telephone companies in p1_4035_4020_172
+public class DataReader{
+
+	public static void main(String[] args) throws FileNotFoundException {
+		
+		LinkedQueue<Customer> arrivalQueue = new LinkedQueue<Customer>();
+		LinkedQueue<Customer> serviceStartsQueue = new LinkedQueue<Customer>();
+		LinkedQueue<Customer> serviceCompletedQueue = new LinkedQueue<Customer>();
+		int n;
+		SLMS[] firstPolicy = {null,null,null};
+		
 		String parentDirectory = "inputFiles";
-		Integer[] data;
-		Customer customer = new Customer();
-		int iD = 1;
+		Scanner parameters = new Scanner(new File(parentDirectory, "parameters.txt")); 
+		// the values of n and m shall be read from file: "inputFiles/parameters.txt". 
+		n = parameters.nextInt(); 
+		String fileName = "data_0.txt"; 
 		
-		long arrivalTime;
-		long departureTime;
-		long serviceTime=0;
+		File inputfile = new File(parentDirectory, fileName);
+		BufferedReader dataReader = null;
+        String dataline;
+        int arrTime = 0;
+        int serTime =0;
+        try {
+
+            dataReader = new BufferedReader(new FileReader(inputfile));
+            while ((dataline = dataReader.readLine()) != null) {
+
+               String[] data =dataline.split(",");             
+              
+               arrTime = Integer.parseInt(data[0]);
+               serTime = Integer.parseInt(data[1].substring(data[1].length()-1));
+               Customer element = new Customer(0, arrTime, serTime);
+              
+              arrivalQueue.enqueue(element);  
+              
+            }
+            
+        
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (dataReader != null) {
+                try {
+                    dataReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();}
+            }
+        }
+        LinkedQueue<SLMS> serv = new LinkedQueue<SLMS>();
+        SLMS serv1 = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
+        serv1.performService(3);
+		System.out.print("Averange Time in System is: ");
+		System.out.printf("%.2f", time(serviceCompletedQueue));
+        
+        
+        for(int i=0;i<firstPolicy.length;i++){
+        	firstPolicy[i] = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
+        	//second policy
+        	//third policy
+        	//fourth policy
+        }        
+        
+        for(int i=0;i<firstPolicy.length;i++){
+        	firstPolicy[i].performService(2*i + 1);
+        	//second policy
+        	//third policy
+        	//fourth policy
+        }        
+	}
+	
+	
+	public static ArrayQueue<Customer> copyOf (ArrayQueue<Customer> list) {
+		ArrayQueue<Customer> copy = new ArrayQueue<>();
 		
-		Scanner parameters;
-		
-		try {
-			parameters = new Scanner(new File(parentDirectory, "parameters.txt"));
-			// the values of n and m shall be read from file: "inputFiles/parameters.txt". 
-			n = parameters.nextInt(); 
-			for(int i=0; i<n;i++){
-				String fileName = "data_" + i + ".txt"; 
-				Scanner inputFile = new Scanner(new File(parentDirectory, fileName)); 
-				while (inputFile.hasNext()){
-					customer = new Customer(iD, inputFile.nextInt(), inputFile.nextInt());
-					arrivalQ.enqueue(customer);
-				}
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		while (!arrivalQ.isEmpty() || !serviceQ.isEmpty()) {
-			if (!serviceQ.isEmpty()) {
-				serviceQ.first().setServed(true);
-
-				if (serviceQ.first().getServiceTime() == 0) {
-					serviceQ.first().setDeparture(serviceTime);
-
-					departureQ.enqueue(serviceQ.dequeue());
-				} else {
-					serviceQ.enqueue(serviceQ.dequeue());
-				}
-
-			}
-
-			if(!arrivalQ.isEmpty() && arrivalQ.first().getArrival() == serviceTime){
-				serviceQ.enqueue(arrivalQ.dequeue());
-			}
-
-			serviceTime++;
+		int i = 0;
+		while(!(i==list.size())) {
+			Customer c = list.dequeue();
+			
+			Customer copyC = new Customer();
+			
+			copyC.setArrival(c.getArrival());
+			copyC.setDeparture(c.getDeparture());
+			copyC.setiD(c.getID());
+			copyC.setServiceTime(c.getServiceTime());
+			
+			list.enqueue(c);
+			copy.enqueue(copyC);
+			i++;
 		}
-
-		int nElements = departureQ.size();
-		int avg_time = 0;
-		while (!departureQ.isEmpty()) {
-			Customer etr = departureQ.dequeue();
-			avg_time += etr.getDeparture() - etr.getArrival();
-		}
-
-		double avg_system_time = avg_time/nElements;
-
-		System.out.println("Average processing time in system: " + avg_system_time);
+		
+		return copy;
+	}
+	
+	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
+		   //Calculates time in system
+  		float totalTime = 0;
+  		float arrVal = 0;
+  		float serVal = 0;
+  		float count = 0;
+  		
+  		while(!(serviceCompletedQueue .isEmpty())) {
+  			arrVal = serviceCompletedQueue.first().getArrival();
+  			serVal = serviceCompletedQueue.first().getServiceTime();
+  			totalTime= (arrVal - serVal ) + totalTime;
+  			count++;
+  	
+  			serviceCompletedQueue .dequeue();
+  		}
+  		totalTime= totalTime/count;
+  		
+//  		System.out.print("Averange Time in System is: ");
+//  		System.out.printf("%.2f", totalTime);
+  	
+  		return totalTime;
 	}
 }

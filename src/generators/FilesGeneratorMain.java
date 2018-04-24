@@ -15,7 +15,7 @@ public class FilesGeneratorMain {
 	public static void main(String[] args) throws FileNotFoundException {
 		if (args.length <= 3) {
 			int n = 10; 
-			int m = 10; 
+			int m = 7; 
 			//int size = 50000; 
 			if (args.length >= 1) 
 				n = Integer.parseInt(args[0]); 
@@ -44,7 +44,7 @@ public class FilesGeneratorMain {
 			PrintWriter out2 = new PrintWriter(new File(parentDirectory, fileName)); 
 			for (int j=0; j<m;j++){
 				out2.print(rand.nextInt(10));
-				out2.print(" ");
+				out2.print(", ");
 				out2.println(rand.nextInt(10));
 			}
 			out.println("data_" + i + ".txt");
