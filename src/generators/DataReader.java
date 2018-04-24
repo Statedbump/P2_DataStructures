@@ -12,7 +12,7 @@ public class DataReader {
 		LinkedQueue<Customer> arrivalQ= new LinkedQueue<>();
 		ArrayQueue<Customer> serviceQ = new ArrayQueue<>();
 		ArrayQueue<Customer> departureQ = new ArrayQueue<>();
-		int n;    // number of data generators (telephone companies in p1_4035_4020_172
+		int n;    
 		String parentDirectory = "inputFiles";
 		Integer[] data;
 		Customer customer = new Customer();
@@ -36,10 +36,13 @@ public class DataReader {
 					arrivalQ.enqueue(customer);
 				}
 			}
+			System.out.println("This works?");
+		
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		
 		while (!arrivalQ.isEmpty() || !serviceQ.isEmpty()) {
 			if (!serviceQ.isEmpty()) {
 				serviceQ.first().setServed(true);
@@ -60,6 +63,7 @@ public class DataReader {
 
 			serviceTime++;
 		}
+		
 
 		int nElements = departureQ.size();
 		int avg_time = 0;
