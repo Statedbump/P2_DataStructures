@@ -83,7 +83,7 @@ public class Customer {
 	 * 
 	 * @param departureTime
 	 */
-	public void setDepature(long departureTime) {
+	public void setDeparture(long departureTime) {
 		this.departureTime = departureTime;
 	}
 	

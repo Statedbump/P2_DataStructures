@@ -1,72 +1,79 @@
-//Kelvin Garcia Muñiz
-//802142644
-//CIIC4020 - 030
 package generators;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
-/**
- * 
- * @author pedroirivera-vega
- *
- */
+import customers.Customer;
+import implementations.ArrayQueue;
+import implementations.LinkedQueue;
+
 public class DataReader {
-
-	private int n;    // number of data generators (telephone companies in p1_4035_4020_172
-	private int m;    // number of data sets produced per data generator
-	private Integer[][][] dataSet; 
-	private String parentDirectory; 
-	
-
-	public DataReader() throws FileNotFoundException {
-		parentDirectory = "inputFiles"; 
-		Scanner parameters = new Scanner(new File(parentDirectory, "parameters.txt")); 
-		// the values of n and m shall be read from file: "inputFiles/parameters.txt". 
-		this.n = parameters.nextInt(); 
-		this.m = parameters.nextInt();
-		parameters.close();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 * @throws FileNotFoundException 
-	 */
-	public Object[][][] readDataFiles() throws FileNotFoundException {
-		dataSet = new Integer[n][m][];
-
-		for (int i=0; i<n; i++) { 
-			for (int j=0; j<m; j++) {
-				
-				String fileName = "F_" + i + "_" + j + ".txt"; 
+	public static void main(String[] args) {
+		LinkedQueue<Customer> arrivalQ= new LinkedQueue<>();
+		ArrayQueue<Customer> serviceQ = new ArrayQueue<>();
+		ArrayQueue<Customer> departureQ = new ArrayQueue<>();
+		int n;    // number of data generators (telephone companies in p1_4035_4020_172
+		String parentDirectory = "inputFiles";
+		Integer[] data;
+		Customer customer = new Customer();
+		int iD = 1;
+		
+		long arrivalTime;
+		long departureTime;
+		long serviceTime=0;
+		
+		Scanner parameters;
+		
+		try {
+			parameters = new Scanner(new File(parentDirectory, "parameters.txt"));
+			// the values of n and m shall be read from file: "inputFiles/parameters.txt". 
+			n = parameters.nextInt(); 
+			for(int i=0; i<n;i++){
+				String fileName = "data_" + i + ".txt"; 
 				Scanner inputFile = new Scanner(new File(parentDirectory, fileName)); 
-				ArrayList<Integer> fileContent = new ArrayList<>(); 
-				while (inputFile.hasNext())
-					fileContent.add(inputFile.nextInt());
-				inputFile.close();
-				dataSet[i][j] = (Integer[]) fileContent.toArray(new Integer[0]);  
+				while (inputFile.hasNext()){
+					customer = new Customer(iD, inputFile.nextInt(), inputFile.nextInt());
+					arrivalQ.enqueue(customer);
+				}
 			}
-		}	
-		return dataSet; 
-	}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		while (!arrivalQ.isEmpty() || !serviceQ.isEmpty()) {
+			if (!serviceQ.isEmpty()) {
+				serviceQ.first().setServed(true);
 
-	
-	public void printSets() { 
-		System.out.println("Sets Fij are: " ); 
-		for (int i=0; i<n; i++)
-			for (int j=0; j<m; j++) { 
-				System.out.print("Set["+i+"]["+j+"] = "); 
-				printArray((Integer[]) dataSet[i][j]); 
+				if (serviceQ.first().getServiceTime() == 0) {
+					serviceQ.first().setDeparture(serviceTime);
+
+					departureQ.enqueue(serviceQ.dequeue());
+				} else {
+					serviceQ.enqueue(serviceQ.dequeue());
+				}
+
 			}
-	}
-	
-	private void printArray(Integer[] numbers) {
-		for (int i=0; i<numbers.length; i++) 
-			System.out.print(numbers[i] + "  "); 
-		System.out.println(); 
-	}
 
+			if(!arrivalQ.isEmpty() && arrivalQ.first().getArrival() == serviceTime){
+				serviceQ.enqueue(arrivalQ.dequeue());
+			}
 
+			serviceTime++;
+		}
+
+		int nElements = departureQ.size();
+		int avg_time = 0;
+		while (!departureQ.isEmpty()) {
+			Customer etr = departureQ.dequeue();
+			avg_time += etr.getDeparture() - etr.getArrival();
+		}
+
+		double avg_system_time = avg_time/nElements;
+
+		System.out.println("Average processing time in system: " + avg_system_time);
+	}
 }
