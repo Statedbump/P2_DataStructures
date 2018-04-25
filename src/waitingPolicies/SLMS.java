@@ -11,12 +11,12 @@ public class SLMS {
 	private LinkedQueue<Customer>departureQueue;
 	private LinkedQueue<Customer>serviceQueue;
 	private int servedTime;
-
+	int departureTime=0;
 	public SLMS( LinkedQueue<Customer> arrivalQueue, LinkedQueue<Customer>serviceQueue, LinkedQueue<Customer>departureQueue) {
 		this.arrivalQueue = arrivalQueue;
 		this.departureQueue = departureQueue;
 		this.serviceQueue = serviceQueue;
-		
+
 		
 	}
 	
@@ -36,6 +36,7 @@ public class SLMS {
 				c1.setServiceTime(c1.getServiceTime()-1);
 				if(c1.getServiceTime()==0) {
 					this.departureQueue.enqueue(this.serviceQueue.dequeue());
+					departureTime += 1;
 				}else {
 					this.serviceQueue.enqueue(this.serviceQueue.dequeue());
 				}
@@ -51,5 +52,8 @@ public class SLMS {
 	}
 	public int getsServedTime() {
 		return servedTime;
+	}
+	public int getDepartureTime(){
+		return departureTime;
 	}
 }

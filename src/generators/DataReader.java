@@ -16,7 +16,7 @@ import implementations.LinkedQueue;
 
 public class DataReader{
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws IOException {
 		
 		LinkedQueue<Customer> arrivalQueue = new LinkedQueue<Customer>();
 		LinkedQueue<Customer> serviceStartsQueue = new LinkedQueue<Customer>();
@@ -36,7 +36,6 @@ public class DataReader{
         String dataline;
         int arrTime = 0;
         int serTime =0;
-        try {
 
             dataReader = new BufferedReader(new FileReader(inputfile));
             while ((dataline = dataReader.readLine()) != null) {
@@ -49,58 +48,32 @@ public class DataReader{
               
               arrivalQueue.enqueue(element);  
               
-            }
-            
-        
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+            }           
             if (dataReader != null) {
-                try {
                     dataReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();}
-            }
+
         }
         LinkedQueue<SLMS> serv = new LinkedQueue<SLMS>();
         SLMS serv1 = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
         int numofServers = 1;
         while(numofServers<6){
         	serv1.performService(numofServers);
-        	value = (double)(serv1.getsServedTime() - arrTime)/serviceCompletedQueue.size();
-    		averageTime = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+//        	value = (double)(arrTime - serv1.getsServedTime())/serviceCompletedQueue.size();
+        	value = time(serviceCompletedQueue);
+//    		averageTime = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
         	System.out.print("\nSLMS "+numofServers+": "+serv1.getsServedTime()+" ");
-        	System.out.printf("%.2f", averageTime);
+        	System.out.printf("%.2f", value);
         	numofServers+=2;
-        }
-//		System.out.print("Averange Time in System is: ");
-        
-        
-        for(int i=0;i<firstPolicy.length;i++){
-        	firstPolicy[i] = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
-        	//second policy
-        	//third policy
-        	//fourth policy
-        }        
-        
-        for(int i=0;i<firstPolicy.length;i++){
-        	firstPolicy[i].performService(2*i + 1);
-        	//second policy
-        	//third policy
-        	//fourth policy
-        }        
+        }      
 	}
 	
 	
-	public static ArrayQueue<Customer> copyOf (ArrayQueue<Customer> list) {
-		ArrayQueue<Customer> copy = new ArrayQueue<>();
+	public static LinkedQueue<Customer> copyOf (LinkedQueue<Customer> list) {
+		LinkedQueue<Customer> copy = new LinkedQueue<>();
 		
 		int i = 0;
 		while(!(i==list.size())) {
 			Customer c = list.dequeue();
-			
 			Customer copyC = new Customer();
 			
 			copyC.setArrival(c.getArrival());
@@ -115,28 +88,25 @@ public class DataReader{
 		
 		return copy;
 	}
-	
-//	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
-//		   //Calculates time in system
-//  		float totalTime = 0;
-//  		float arrVal = 0;
-//  		float serVal = 0;
-//  		float count = 0;
-//  		
-//  		while(!(serviceCompletedQueue .isEmpty())) {
-//  			arrVal = serviceCompletedQueue.first().getArrival();
-//  			serVal = serviceCompletedQueue.first().getServiceTime();
-//  			totalTime= (arrVal - serVal ) + totalTime;
-//  			count++;
-//  	
-//  			serviceCompletedQueue .dequeue();
-//  		}
-//  		totalTime= totalTime/count;
-//  		
-////  		System.out.print("Averange Time in System is: ");
-////  		System.out.printf("%.2f", totalTime);
-//  	
-//  		return totalTime;
-//	}
+
+	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
+		   //Calculates time in system
+  		float totalTime = 0;
+  		float arrVal = 0;
+  		float serVal = 0;
+  		float count = 0;
+  		LinkedQueue<Customer> copyServiceCompletedQueue = copyOf(serviceCompletedQueue);
+  		while(!(copyServiceCompletedQueue.isEmpty())) {
+  			arrVal = copyServiceCompletedQueue.first().getArrival();
+  			serVal = copyServiceCompletedQueue.first().getServiceTime();
+  			totalTime= (arrVal - serVal ) + totalTime;
+  			count++;
+  	
+  			copyServiceCompletedQueue.dequeue();
+  		}
+  		totalTime= totalTime/count;
+  	
+  		return totalTime;
+	}
 	
 }
