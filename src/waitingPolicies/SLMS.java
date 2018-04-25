@@ -24,6 +24,19 @@ public class SLMS {
 		
 		while(!this.arrivalQueue.isEmpty() || !this.serviceQueue.isEmpty()){
 			
+			
+			if(!serviceQueue.isEmpty()) {
+				Customer c1 = this.serviceQueue.first();
+				c1.setServiceTime(c1.getServiceTime()-1);
+				if(c1.getServiceTime()==0) {
+					this.departureQueue.enqueue(this.serviceQueue.dequeue());
+					
+				}else {
+					this.serviceQueue.enqueue(this.serviceQueue.dequeue());
+				}
+
+			}
+
 			if(!this.arrivalQueue.isEmpty()) {
 				Customer c = this.arrivalQueue.first();
 				if(c.getArrival()>= servedTime && this.serviceQueue.size()!= numOfServ) {
@@ -31,17 +44,6 @@ public class SLMS {
 				}
 			}
 			
-			if(!serviceQueue.isEmpty()) {
-				Customer c1 = this.serviceQueue.first();
-				c1.setServiceTime(c1.getServiceTime()-1);
-				if(c1.getServiceTime()==0) {
-					this.departureQueue.enqueue(this.serviceQueue.dequeue());
-					departureTime += 1;
-				}else {
-					this.serviceQueue.enqueue(this.serviceQueue.dequeue());
-				}
-
-			}
 			
 		}
 		
@@ -53,7 +55,5 @@ public class SLMS {
 	public int getsServedTime() {
 		return servedTime;
 	}
-	public int getDepartureTime(){
-		return departureTime;
-	}
+
 }

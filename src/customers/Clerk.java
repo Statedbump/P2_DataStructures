@@ -20,13 +20,13 @@ public class Clerk {
 	public int customersInLine() {
 		return clerks.size();
 	}
-	public Customer finishAttending() {
+	public Customer beginAttending() {
 		return clerks.removeFirst();
 	}
 	public Customer transfer() {
 		return clerks.removeLast();
 	}
-	public Customer beingAttended() {
+	public Customer firstInLine() {
 		return clerks.first();
 	}
 	
