@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
 
 import customers.Customer;
@@ -20,6 +22,7 @@ public class DataReader{
 		LinkedQueue<Customer> serviceStartsQueue = new LinkedQueue<Customer>();
 		LinkedQueue<Customer> serviceCompletedQueue = new LinkedQueue<Customer>();
 		int n;
+		double averageTime, value;
 		SLMS[] firstPolicy = {null,null,null};
 		
 		String parentDirectory = "inputFiles";
@@ -63,9 +66,16 @@ public class DataReader{
         }
         LinkedQueue<SLMS> serv = new LinkedQueue<SLMS>();
         SLMS serv1 = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
-        serv1.performService(3);
-		System.out.print("Averange Time in System is: ");
-		System.out.printf("%.2f", time(serviceCompletedQueue));
+        int numofServers = 1;
+        while(numofServers<6){
+        	serv1.performService(numofServers);
+        	value = (double)(serv1.getsServedTime() - arrTime)/serviceCompletedQueue.size();
+    		averageTime = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        	System.out.print("\nSLMS "+numofServers+": "+serv1.getsServedTime()+" ");
+        	System.out.printf("%.2f", averageTime);
+        	numofServers+=2;
+        }
+//		System.out.print("Averange Time in System is: ");
         
         
         for(int i=0;i<firstPolicy.length;i++){
@@ -106,26 +116,27 @@ public class DataReader{
 		return copy;
 	}
 	
-	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
-		   //Calculates time in system
-  		float totalTime = 0;
-  		float arrVal = 0;
-  		float serVal = 0;
-  		float count = 0;
-  		
-  		while(!(serviceCompletedQueue .isEmpty())) {
-  			arrVal = serviceCompletedQueue.first().getArrival();
-  			serVal = serviceCompletedQueue.first().getServiceTime();
-  			totalTime= (arrVal - serVal ) + totalTime;
-  			count++;
-  	
-  			serviceCompletedQueue .dequeue();
-  		}
-  		totalTime= totalTime/count;
-  		
-//  		System.out.print("Averange Time in System is: ");
-//  		System.out.printf("%.2f", totalTime);
-  	
-  		return totalTime;
-	}
+//	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
+//		   //Calculates time in system
+//  		float totalTime = 0;
+//  		float arrVal = 0;
+//  		float serVal = 0;
+//  		float count = 0;
+//  		
+//  		while(!(serviceCompletedQueue .isEmpty())) {
+//  			arrVal = serviceCompletedQueue.first().getArrival();
+//  			serVal = serviceCompletedQueue.first().getServiceTime();
+//  			totalTime= (arrVal - serVal ) + totalTime;
+//  			count++;
+//  	
+//  			serviceCompletedQueue .dequeue();
+//  		}
+//  		totalTime= totalTime/count;
+//  		
+////  		System.out.print("Averange Time in System is: ");
+////  		System.out.printf("%.2f", totalTime);
+//  	
+//  		return totalTime;
+//	}
+	
 }
