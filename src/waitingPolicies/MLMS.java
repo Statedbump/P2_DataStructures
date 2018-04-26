@@ -8,11 +8,11 @@ import implementations.LinkedQueue;
 public class MLMS {
 	private LinkedQueue<Customer> arrivalQueue;
 	private LinkedQueue<Customer>departureQueue;
-	private ArrayQueue<Customer>serviceQueue;
+	private LinkedQueue<Customer>serviceQueue;
 	private Clerk[] clerks;
 	private int servedTime;
 	
-	public MLMS (LinkedQueue<Customer> arrivalQueue, ArrayQueue<Customer>serviceQueue, 
+	public MLMS (LinkedQueue<Customer> arrivalQueue, LinkedQueue<Customer>serviceQueue, 
 			LinkedQueue<Customer>departureQueue) {
 		this.arrivalQueue = arrivalQueue;
 		this.departureQueue = departureQueue;
@@ -22,17 +22,17 @@ public class MLMS {
 	
 public void performService(int numOfServ) {
 		
-		clerks = this.waitingLineofClerk(numOfServ);
+		clerks = new Clerk[numOfServ];
 		
 		while(!this.arrivalQueue.isEmpty() || !this.serviceQueue.isEmpty()){
 			
 			if(!this.arrivalQueue.isEmpty()) {
-				this.getInLine(clerks);
-				Customer[] cAtLine = (Customer[])new Object[numOfServ];
+				this.assignToLine(clerks);
+				Customer[] cAtLine = new Customer[numOfServ];
 				for(int i = 0; i< numOfServ; i ++) {
-					cAtLine[i] = clerks[i].firstInLine();
+					cAtLine[i] = clerks[i].peekFirstInLine();
 				if(cAtLine[i].getArrival()>= servedTime && this.serviceQueue.size()!= this.numOfValidLines(clerks)) {
-					this.serviceQueue.enqueue(clerks[i].beginAttending());
+					this.serviceQueue.enqueue(clerks[i].nextCustomer());
 				}
 				}
 			}
@@ -52,33 +52,39 @@ public void performService(int numOfServ) {
 		
 		servedTime++;
 	}
-	public void getInLine(Clerk[] clerks) {
+	
 		// this method assigns a customer to the line with the lowest amount of customers
-		int position = 0;
-		while(!arrivalQueue.isEmpty()) {
-			for(int i = 1 ;i< clerks.length;i++) {
-				if(clerks[i].customersInLine() < clerks[i-1].customersInLine()) {
-					position = i;
-				}
-			}
-			clerks[position].addToClerkLine(arrivalQueue.dequeue());
-		}
+	    public void assignToLine(Clerk[] line){
+	    	int index = 0;
+	    	if(!arrivalQueue.isEmpty()){
+	    		
+	        	
+	        	for(int i=1;i<line.length;i++){
+	        		if(line[i].lineLength() < line[i-1].lineLength()){
+	        			index = i;
+	        		}
+	        	}
+	        	
+	        	line[index].add(arrivalQueue.dequeue());
+	    	}
+	}
 		
-	}
-	public Clerk[] waitingLineofClerk(int numOfServ) {
-		Clerk[] servers = (Clerk[])new Object[numOfServ];
-		return servers;
-	}
+	
+
 	
 	public int numOfValidLines(Clerk[] clerks) {
 		int counter = 0;
 		for(int i = 0; i< clerks.length;i++) {
-			if(clerks[i].isValidLine()) {
+			if(clerks[i].isThereLine()) {
 				counter ++;
 			}
 		}
 		return counter;
 		
 	}
+	public int getsServedTime() {
+		return servedTime;
+	}
+
 
 }

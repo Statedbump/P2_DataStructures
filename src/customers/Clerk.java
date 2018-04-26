@@ -1,34 +1,35 @@
 package customers;
 
 import implementations.LinkedDeque;
+import implementations.LinkedQueue;
 import interfaces.Deque;
 
 public class Clerk {
-	private Deque <Customer> clerks;
+private LinkedQueue<Customer> lineQueue;
 	
-	public Clerk() {
-		clerks = new LinkedDeque<>();
-	}
-	
-	public boolean isValidLine() {
-		return !clerks.isEmpty();
+	public Clerk(){
+		lineQueue = new LinkedQueue<Customer>();
 	}
 	
-	public void addToClerkLine(Customer c) {
-		clerks.addLast(c);
-	}
-	public int customersInLine() {
-		return clerks.size();
-	}
-	public Customer beginAttending() {
-		return clerks.removeFirst();
-	}
-	public Customer transfer() {
-		return clerks.removeLast();
-	}
-	public Customer firstInLine() {
-		return clerks.first();
+	public boolean isThereLine(){
+		return !lineQueue.isEmpty();
 	}
 	
+	public void add(Customer client){
+		lineQueue.enqueue(client);
+	}
+	
+	public Customer peekFirstInLine(){
+		return lineQueue.first();
+	}
+	
+	public Customer nextCustomer(){
+		return lineQueue.dequeue();
+	}
+	
+	public int lineLength(){
+		return lineQueue.size();
+	}
+
 
 }
