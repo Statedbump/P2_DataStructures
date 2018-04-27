@@ -19,6 +19,7 @@ public class TesterSLMS {
 		long arrivalTime, serviceTime;
 		int numOfServers;
 		ArrayList<Customer> list = new ArrayList<>();
+		ArrayList<Customer> list2 = new ArrayList<>();
 		while(scanner.hasNextInt()){
 			arrivalTime = scanner.nextInt();
 			serviceTime =scanner.nextInt();
@@ -29,10 +30,19 @@ public class TesterSLMS {
 		SLMS serv1= new SLMS();
 		numOfServers=1;
 		while(numOfServers<6){
-			serv1.performService(numOfServers, list);
+			list2 = copyList(list);
+			System.out.println(list2.toString());
+			serv1.performService(numOfServers, list2);
 			System.out.println("SLMS " + numOfServers+ ": " + serv1.getsTotalTime());
 			numOfServers+=2;
 		}
+	}
+	public static ArrayList<Customer> copyList(ArrayList<Customer> list){
+		ArrayList<Customer> list2 = new ArrayList<>();
+		for(Customer E: list){
+			list2.add(E);
+		}
+		return list2;
 	}
 //	public static LinkedQueue<Customer> copyOf (LinkedQueue<Customer> list) {
 //		LinkedQueue<Customer> copy = new LinkedQueue<>();
