@@ -1,5 +1,8 @@
-/waitingPolicies/
 /customers/
+/waitingPolicies/
 /generators/
+<<<<<<< HEAD
 /implementations/
+=======
+>>>>>>> refs/remotes/origin/master
 /testerClasses/
