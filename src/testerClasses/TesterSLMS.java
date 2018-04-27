@@ -17,9 +17,11 @@ public class TesterSLMS {
 		String file = "data_0.txt";
 		Scanner scanner = new Scanner(new File(directory, file));
 		long arrivalTime, serviceTime;
-		int numOfServers;
+		int numOfServers = 1;
 		ArrayList<Customer> list = new ArrayList<>();
 		ArrayList<Customer> list2 = new ArrayList<>();
+		SLMS[] policy1 = new SLMS[3];
+		initializePolicies(policy1);
 		while(scanner.hasNextInt()){
 			arrivalTime = scanner.nextInt();
 			serviceTime =scanner.nextInt();
@@ -27,15 +29,24 @@ public class TesterSLMS {
 			list.add(customer); 
 		}
 		scanner.close();
-		SLMS serv1= new SLMS();
-		numOfServers=1;
-		while(numOfServers<6){
+		
+		for(int i =0; i<3 ; i++) {
+			list2 = new ArrayList<Customer>();
 			list2 = copyList(list);
-			System.out.println(list2.toString());
-			serv1.performService(numOfServers, list2);
-			System.out.println("SLMS " + numOfServers+ ": " + serv1.getsTotalTime());
+			policy1[i].performService(numOfServers, list2);
+			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime());
 			numOfServers+=2;
 		}
+		
+//		SLMS serv1= new SLMS();
+//		numOfServers=3;
+//		while(numOfServers<6){
+		
+//			System.out.println(list2.toString());
+//			serv1.performService(numOfServers, list2);
+//			System.out.println("SLMS " + numOfServers+ ": " + serv1.getsTotalTime());
+//			numOfServers+=2;
+//		}
 	}
 	public static ArrayList<Customer> copyList(ArrayList<Customer> list){
 		ArrayList<Customer> list2 = new ArrayList<>();
@@ -84,6 +95,12 @@ public class TesterSLMS {
 	//  		return totalTime;
 	//	}
 
-
+	public static void initializePolicies(SLMS[]policy1) {
+		for(int i = 0; i< 3;i++) {
+			
+			policy1[i]= new SLMS();
+			
+		}
+	}
 
 }

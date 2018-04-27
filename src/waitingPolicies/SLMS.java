@@ -53,7 +53,10 @@ public class SLMS {
 						s.attending().setServiceTime(s.attending().getServiceTime()-1);
 						
 						if(s.attending().getServiceTime()==0) {
-							serviceCompletedEvent.enqueue(s.nextCustomer());
+							Customer c = s.nextCustomer();
+							c.resetServiceTime();
+							serviceCompletedEvent.enqueue(c);
+							
 							
 						}
 					}
@@ -71,7 +74,7 @@ public class SLMS {
 	}
 	private  WaitingLine addCustomersToLine(ArrayList<Customer> ArrivingCustomers) {
 		WaitingLine line = new WaitingLine();
-
+		ArrayList<Customer> temp = new ArrayList<>(); 
 		while( !ArrivingCustomers.isEmpty()) {
 			Customer e = ArrivingCustomers.get(0);
 			for(Customer c: ArrivingCustomers ) {
@@ -80,10 +83,12 @@ public class SLMS {
 					e = c;
 				}
 			}
-//			System.out.println(e.getArrival()+" " + e.getServiceTime());
+		System.out.println(e.getArrival()+" " + e.getServiceTime());
 			line.add(e);
+			temp.add(e);
 			ArrivingCustomers.remove(e);
 		}
+		ArrivingCustomers = temp;
 		return line;
 	}
 	

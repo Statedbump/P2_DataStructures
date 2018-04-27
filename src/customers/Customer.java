@@ -11,6 +11,7 @@ public class Customer {
 	private long arrivalTime;	//sets the time the costumer arrived
 	private long serviceTime;	//
 	private long departureTime;	//sets the time the costumer left
+	private long old;
 	int m;
 	
 	/**
@@ -30,6 +31,7 @@ public class Customer {
 		this.ID = ID;
 		this.arrivalTime = arrivalTime;
 		this.serviceTime = serviceTime;
+		old = serviceTime;
 		isServed = false;
 	}
 	
@@ -111,6 +113,10 @@ public class Customer {
 	 */
 	public long getDeparture() {
 		return departureTime;
+	}
+	
+	public void resetServiceTime() {
+		serviceTime = old;
 	}
 	
 	/**
