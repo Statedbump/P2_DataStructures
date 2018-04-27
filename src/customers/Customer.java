@@ -1,3 +1,4 @@
+
 package customers;
 /**
  * 
@@ -10,6 +11,7 @@ public class Customer {
 	private long arrivalTime;	//sets the time the costumer arrived
 	private long serviceTime;	//
 	private long departureTime;	//sets the time the costumer left
+	int m;
 	
 	/**
 	 * Default Constructor
@@ -111,4 +113,20 @@ public class Customer {
 		return departureTime;
 	}
 	
+	/**
+	 * 
+	 */
+	public void increaseM() {
+		m++; 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public long getTimeWaiting(){
+		long time = arrivalTime - departureTime;
+		return time;
+	}
+
 }

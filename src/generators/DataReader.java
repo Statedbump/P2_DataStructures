@@ -21,10 +21,10 @@ public class DataReader{
 		
 		LinkedQueue<Customer> arrivalQueue = new LinkedQueue<Customer>();
 		LinkedQueue<Customer> serviceStartsQueue = new LinkedQueue<Customer>();
-		LinkedQueue<Customer> serviceCompletedQueue = new LinkedQueue<Customer>();
+		ArrayQueue<Customer> serviceCompletedQueue = new ArrayQueue<Customer>();
 		int n;
 		double averageTime, value;
-		MLMS[] firstPolicy = {null,null,null};
+		
 		
 		String parentDirectory = "inputFiles";
 		Scanner parameters = new Scanner(new File(parentDirectory, "parameters.txt")); 
@@ -56,7 +56,7 @@ public class DataReader{
         }
     
         SLMS serv1 = new SLMS(arrivalQueue, serviceStartsQueue, serviceCompletedQueue);
-        int numofServers = 3;
+        int numofServers = 1;
         
 
         	serv1.performService(numofServers);
@@ -65,15 +65,15 @@ public class DataReader{
 //   		averageTime = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
         	
        
-        	System.out.print("\nSLMS "+numofServers+": "+serv1.getsServedTime()+" ");
+        	System.out.print("\nSLMS "+numofServers+": "+serv1.getServedTime()+" ");
         	System.out.printf("%.2f", value);
         	numofServers+=2;
              
 	}
 	
 	
-	public static LinkedQueue<Customer> copyOf (LinkedQueue<Customer> list) {
-		LinkedQueue<Customer> copy = new LinkedQueue<>();
+	public static ArrayQueue<Customer> copyOf (ArrayQueue<Customer> list) {
+		ArrayQueue<Customer> copy = new ArrayQueue<>();
 		
 		int i = 0;
 		while(!(i==list.size())) {
@@ -93,13 +93,13 @@ public class DataReader{
 		return copy;
 	}
 
-	public static float time(LinkedQueue<Customer> serviceCompletedQueue ) {
+	public static float time(ArrayQueue<Customer> serviceCompletedQueue ) {
 		   //Calculates time in system
   		float totalTime = 0;
   		float arrVal = 0;
   		float serVal = 0;
   		int i =0;
-  		LinkedQueue<Customer> copyServiceCompletedQueue = copyOf(serviceCompletedQueue);
+  		ArrayQueue<Customer> copyServiceCompletedQueue = copyOf(serviceCompletedQueue);
   		while(!(copyServiceCompletedQueue.isEmpty())) {
   			arrVal = copyServiceCompletedQueue.first().getArrival();
   			serVal = copyServiceCompletedQueue.first().getDeparture()-arrVal;

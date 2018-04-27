@@ -1,6 +1,6 @@
 package waitingPolicies;
 
-import customers.Clerk;
+import customers.Server;
 import customers.Customer;
 import implementations.ArrayQueue;
 import implementations.LinkedQueue;
@@ -9,7 +9,7 @@ public class MLMS {
 	private LinkedQueue<Customer> arrivalQueue;
 	private LinkedQueue<Customer>departureQueue;
 	private LinkedQueue<Customer>serviceQueue;
-	private Clerk[] clerks;
+	private Server[] clerks;
 	private int servedTime;
 	
 	public MLMS (LinkedQueue<Customer> arrivalQueue, LinkedQueue<Customer>serviceQueue, 
@@ -22,7 +22,7 @@ public class MLMS {
 	
 public void performService(int numOfServ) {
 		
-		clerks = new Clerk[numOfServ];
+		clerks = new Server[numOfServ];
 		
 		while(!this.arrivalQueue.isEmpty() || !this.serviceQueue.isEmpty()){
 			
@@ -54,7 +54,7 @@ public void performService(int numOfServ) {
 	}
 	
 		// this method assigns a customer to the line with the lowest amount of customers
-	    public void assignToLine(Clerk[] line){
+	    public void assignToLine(Server[] line){
 	    	int index = 0;
 	    	if(!arrivalQueue.isEmpty()){
 	    		
@@ -72,7 +72,7 @@ public void performService(int numOfServ) {
 	
 
 	
-	public int numOfValidLines(Clerk[] clerks) {
+	public int numOfValidLines(Server[] clerks) {
 		int counter = 0;
 		for(int i = 0; i< clerks.length;i++) {
 			if(clerks[i].isThereLine()) {
