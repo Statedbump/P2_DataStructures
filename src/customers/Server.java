@@ -1,13 +1,10 @@
 package customers;
-
-import implementations.LinkedDeque;
 import implementations.LinkedQueue;
-import interfaces.Deque;
 
-public class Clerk {
+public class Server {
 private LinkedQueue<Customer> lineQueue;
 	
-	public Clerk(){
+	public Server(){
 		lineQueue = new LinkedQueue<Customer>();
 	}
 	
@@ -19,10 +16,10 @@ private LinkedQueue<Customer> lineQueue;
 		lineQueue.enqueue(client);
 	}
 	
-	public Customer peekFirstInLine(){
+	public Customer viewFirstInLine(){
 		return lineQueue.first();
 	}
-	
+
 	public Customer nextCustomer(){
 		return lineQueue.dequeue();
 	}
@@ -30,6 +27,15 @@ private LinkedQueue<Customer> lineQueue;
 	public int lineLength(){
 		return lineQueue.size();
 	}
-
-
+	
+	public long getSumOfWaiting(){
+		LinkedQueue<Customer> tempQueue = lineQueue;
+		long sum = 0;
+		
+		while(!tempQueue.isEmpty()){
+			sum += tempQueue.dequeue().getTimeWaiting();
+		}
+		
+		return sum;
+	}
 }
