@@ -15,7 +15,6 @@ public class SLMS {
 	private Server[] servers; 
 	private LinkedQueue<Customer>serviceCompletedEvent;
 	private int totalTime;
-
 	public SLMS() {
 		serviceCompletedEvent = new LinkedQueue<>();
 	}
@@ -41,14 +40,11 @@ public class SLMS {
 				for(Server s: servers) {
 					//System.out.println(totalTime);
 					if(!s.isServing() &&  totalTime >= line.first().getArrival()) {
-						System.out.println("Started Serving Customer at time = " + totalTime);
+//						System.out.println("Started Serving Customer at time = " + totalTime);
 						s.add(line.next());
 						break;
 					}
-
 				}
-			
-
 			}
 			
 			if(serviceCompletedEvent.size() != numberOfCustomers) {
@@ -58,14 +54,13 @@ public class SLMS {
 						
 						if(s.attending().getServiceTime()==0) {
 							serviceCompletedEvent.enqueue(s.nextCustomer());
+							
 						}
 					}
 				}
 
 			}
 			totalTime++;
-
-
 
 		}
 
@@ -85,13 +80,13 @@ public class SLMS {
 					e = c;
 				}
 			}
-			System.out.println(e.getArrival()+" " + e.getServiceTime());
+//			System.out.println(e.getArrival()+" " + e.getServiceTime());
 			line.add(e);
 			ArrivingCustomers.remove(e);
 		}
 		return line;
-
 	}
+	
 	private void inititateServers(ArrayList<Server> servers, int n) {
 		int i = 0;
 		while(i<n) {
@@ -99,6 +94,5 @@ public class SLMS {
 			i++;
 		}
 	}
-
 }
 

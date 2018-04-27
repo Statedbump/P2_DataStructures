@@ -89,4 +89,17 @@ public class LinkedQueue<E> implements Queue<E> {
 				}
 				return s + "}" ;
 	}
+	public LinkedQueue<E> clone() throws CloneNotSupportedException {			
+		
+		LinkedQueue<E> copy = new LinkedQueue<E>();
+		Node<E> current = first;
+		E etr;
+		
+		while(current != null){
+			etr = current.element;
+			copy.enqueue(etr);
+			current = current.next;
+		}
+		return copy;
+	}
 }
