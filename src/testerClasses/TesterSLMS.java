@@ -1,6 +1,8 @@
 package testerClasses;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,11 +29,13 @@ public class TesterSLMS {
 		}
 		scanner.close();
 		System.out.println("--------------------------------");
+		NumberFormat formatter = new DecimalFormat("#0.00");     
 		for(int i =0; i<3 ; i++) {
 			list2 = new ArrayList<Customer>();
 			list2 = copyList(list);
 			policy1[i].performService(numOfServers, list2);
-			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t" +policy1[i].getAverageWaiting());
+			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t" + 
+			formatter.format(policy1[i].getAverageWaiting()));
 			numOfServers+=2;
 		}
 		System.out.println("--------------------------------");
