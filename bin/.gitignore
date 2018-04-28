@@ -1,6 +1,3 @@
-/customers/
-/generators/
-/implementations/
-/interfaces/
-/testerClasses/
 /waitingPolicies/
+/testerClasses/
+/customers/

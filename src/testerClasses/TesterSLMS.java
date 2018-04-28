@@ -1,13 +1,10 @@
 package testerClasses;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import customers.Customer;
-import implementations.ArrayQueue;
-import implementations.LinkedQueue;
 import waitingPolicies.SLMS;
 
 public class TesterSLMS {
@@ -29,24 +26,15 @@ public class TesterSLMS {
 			list.add(customer); 
 		}
 		scanner.close();
-		
+		System.out.println("--------------------------------");
 		for(int i =0; i<3 ; i++) {
 			list2 = new ArrayList<Customer>();
 			list2 = copyList(list);
 			policy1[i].performService(numOfServers, list2);
-			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime());
+			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getTotalWaitingTime()+ "\t" +policy1[i].getAverageWaiting());
 			numOfServers+=2;
 		}
-		
-//		SLMS serv1= new SLMS();
-//		numOfServers=3;
-//		while(numOfServers<6){
-		
-//			System.out.println(list2.toString());
-//			serv1.performService(numOfServers, list2);
-//			System.out.println("SLMS " + numOfServers+ ": " + serv1.getsTotalTime());
-//			numOfServers+=2;
-//		}
+		System.out.println("--------------------------------");
 	}
 	public static ArrayList<Customer> copyList(ArrayList<Customer> list){
 		ArrayList<Customer> list2 = new ArrayList<>();

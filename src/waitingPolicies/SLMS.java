@@ -5,16 +5,14 @@ import java.util.ArrayList;
 import customers.Server;
 import customers.Customer;
 import customers.WaitingLine;
-import implementations.ArrayQueue;
 import implementations.LinkedQueue;
-import interfaces.Queue;
 
 public class SLMS {
 
 	private WaitingLine line;
-	private Server[] servers; 
 	private LinkedQueue<Customer>serviceCompletedEvent;
-	private int totalTime;
+	private long totalTime;
+	private double sumOfWaiting;
 	public SLMS() {
 		serviceCompletedEvent = new LinkedQueue<>();
 	}
@@ -25,12 +23,9 @@ public class SLMS {
 		ArrayList<Server> servers = new ArrayList<>();
 		// Servers can now begin attending Customers one at a Time
 		this.inititateServers(servers,numOfservers);
-
 		//Customers are then added to the line in order
 		//from least to greatest arrival Time
-
 		line = this.addCustomersToLine(ArrivingCustomers);
-
 		totalTime=0;
 
 		while(!line.isEmpty() || serviceCompletedEvent.size() != numberOfCustomers ) {
@@ -41,38 +36,39 @@ public class SLMS {
 					//System.out.println(totalTime);
 					if(!s.isServing() &&  totalTime >= line.first().getArrival()) {
 //						System.out.println("Started Serving Customer at time = " + totalTime);
+						sumOfWaiting = sumOfWaiting +(totalTime-line.first().getArrival());
 						s.add(line.next());
+						if(!line.isEmpty()){
+							if(s.attending().getArrival()==line.first().getArrival()){
+								s.add(line.next());
+							}
+						}
 						break;
 					}
 				}
 			}
-			
+
 			if(serviceCompletedEvent.size() != numberOfCustomers) {
 				for(Server s : servers) {
 					if(s.isServing()) {
 						s.attending().setServiceTime(s.attending().getServiceTime()-1);
-						
+
 						if(s.attending().getServiceTime()==0) {
 							Customer c = s.nextCustomer();
 							c.resetServiceTime();
-							serviceCompletedEvent.enqueue(c);
-							
-							
+							//							c.setDeparture(totalTime);
+							serviceCompletedEvent.enqueue(c);	
 						}
 					}
 				}
-
 			}
 			totalTime++;
-
 		}
-
-
 	}
-	public int getsTotalTime() {
+	public long getsTotalTime() {
 		return totalTime;
 	}
-	private  WaitingLine addCustomersToLine(ArrayList<Customer> ArrivingCustomers) {
+	private WaitingLine addCustomersToLine(ArrayList<Customer> ArrivingCustomers) {
 		WaitingLine line = new WaitingLine();
 		ArrayList<Customer> temp = new ArrayList<>(); 
 		while( !ArrivingCustomers.isEmpty()) {
@@ -83,7 +79,7 @@ public class SLMS {
 					e = c;
 				}
 			}
-		System.out.println(e.getArrival()+" " + e.getServiceTime());
+//			System.out.println(e.getArrival()+" " + e.getServiceTime());
 			line.add(e);
 			temp.add(e);
 			ArrivingCustomers.remove(e);
@@ -91,7 +87,12 @@ public class SLMS {
 		ArrivingCustomers = temp;
 		return line;
 	}
-	
+	public double getTotalWaitingTime(){
+		return sumOfWaiting;
+	}
+	public double getAverageWaiting(){
+		return sumOfWaiting/serviceCompletedEvent.size();
+	}
 	private void inititateServers(ArrayList<Server> servers, int n) {
 		int i = 0;
 		while(i<n) {

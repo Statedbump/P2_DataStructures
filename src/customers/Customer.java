@@ -10,6 +10,7 @@ public class Customer {
 	private boolean isServed;	//true if costumer is served
 	private long arrivalTime;	//sets the time the costumer arrived
 	private long serviceTime;	//
+	private long waitingTime;
 	private long departureTime;	//sets the time the costumer left
 	private long old;
 	int m;
@@ -131,8 +132,11 @@ public class Customer {
 	 * @return
 	 */
 	public long getTimeWaiting(){
-		long time = arrivalTime - departureTime;
-		return time;
+		return waitingTime;
+	}
+	public void setTimeWaiting(long currentTime) {
+		this.waitingTime = currentTime - this.arrivalTime;
+		
 	}
 
 

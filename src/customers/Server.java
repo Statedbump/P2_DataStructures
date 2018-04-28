@@ -1,8 +1,5 @@
 package customers;
-
-import implementations.LinkedDeque;
 import implementations.LinkedQueue;
-import interfaces.Deque;
 
 public class Server {
 private LinkedQueue<Customer> lineQueue;
@@ -38,7 +35,6 @@ private LinkedQueue<Customer> lineQueue;
 		while(!tempQueue.isEmpty()){
 			sum += tempQueue.dequeue().getTimeWaiting();
 		}
-		
 		return sum;
 	}
 }
