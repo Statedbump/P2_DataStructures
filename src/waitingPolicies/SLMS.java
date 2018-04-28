@@ -13,13 +13,14 @@ public class SLMS {
 	private LinkedQueue<Customer>serviceCompletedEvent;
 	private long totalTime;
 	private double sumOfWaiting;
+	int numberOfCustomers;
 	public SLMS() {
 		serviceCompletedEvent = new LinkedQueue<>();
 	}
 
 	public void performService(int numOfservers, ArrayList<Customer> ArrivingCustomers) {
 		// The simulation will stop when there are no more customers left in both ArrivalQueue and Service Queue
-		int numberOfCustomers = ArrivingCustomers.size();
+		this.numberOfCustomers = ArrivingCustomers.size();
 		ArrayList<Server> servers = new ArrayList<>();
 		// Servers can now begin attending Customers one at a Time
 		this.inititateServers(servers,numOfservers);
@@ -34,21 +35,21 @@ public class SLMS {
 				for(Server s: servers) {
 					//System.out.println(totalTime);
 					if(!s.isServing() &&  totalTime >= line.first().getArrival()){
-//						System.out.println("Started Serving Customer at time = " + totalTime);
+						//						System.out.println("Started Serving Customer at time = " + totalTime);
 						sumOfWaiting = sumOfWaiting +(totalTime-line.first().getArrival());
 						s.add(line.next());
 						if(!line.isEmpty() && s.attending().getArrival() == line.first().getArrival() && s != null) {
 
-							
+
 						}else {
 							break;
 						}
-						
+
 					}
-					
+
 				}
-					
-				}
+
+			}
 
 
 			if(serviceCompletedEvent.size() != numberOfCustomers) {
@@ -82,7 +83,7 @@ public class SLMS {
 					e = c;
 				}
 			}
-//			System.out.println(e.getArrival()+" " + e.getServiceTime());
+			//			System.out.println(e.getArrival()+" " + e.getServiceTime());
 			line.add(e);
 			temp.add(e);
 			ArrivingCustomers.remove(e);
@@ -103,5 +104,9 @@ public class SLMS {
 			i++;
 		}
 	}
+	public int getTotalOfCustomers(){
+		return numberOfCustomers;
+	}
+
 }
 
