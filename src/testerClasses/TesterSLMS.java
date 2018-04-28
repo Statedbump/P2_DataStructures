@@ -31,7 +31,7 @@ public class TesterSLMS {
 			list2 = new ArrayList<Customer>();
 			list2 = copyList(list);
 			policy1[i].performService(numOfServers, list2);
-			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getTotalWaitingTime()+ "\t" +policy1[i].getAverageWaiting());
+			System.out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t" +policy1[i].getAverageWaiting());
 			numOfServers+=2;
 		}
 		System.out.println("--------------------------------");
