@@ -1,90 +1,70 @@
 package waitingPolicies;
 
 import customers.Server;
+import customers.WaitingLine;
+
+import java.util.ArrayList;
+
 import customers.Customer;
 import implementations.ArrayQueue;
 import implementations.LinkedQueue;
 
 public class MLMS {
-	private LinkedQueue<Customer> arrivalQueue;
-	private LinkedQueue<Customer>departureQueue;
-	private LinkedQueue<Customer>serviceQueue;
-	private Server[] clerks;
-	private int servedTime;
+
+	private WaitingLine line;
+	private LinkedQueue<Customer>serviceCompletedEvent;
+	private long totalTime;
+	private double sumOfWaiting;
 	
-	public MLMS (LinkedQueue<Customer> arrivalQueue, LinkedQueue<Customer>serviceQueue, 
-			LinkedQueue<Customer>departureQueue) {
-		this.arrivalQueue = arrivalQueue;
-		this.departureQueue = departureQueue;
-		this.serviceQueue = serviceQueue;
+	public MLMS () {
+		
+		serviceCompletedEvent = new LinkedQueue<>();
+		
 		
 	}
 	
-public void performService(int numOfServ) {
-		
-		clerks = new Server[numOfServ];
-		
-		while(!this.arrivalQueue.isEmpty() || !this.serviceQueue.isEmpty()){
+public void performService(int numOfservers,ArrayList<Customer> ArrivingCustomers) {
+	// The simulation will stop when there are no more customers left in both ArrivalQueue and Service Queue
+			int numberOfCustomers = ArrivingCustomers.size();
+			ArrayList<Server> servers = new ArrayList<>();
+			ArrayList<WaitingLine> lines =  new ArrayList<>();
+			// Servers can now begin attending Customers one at a Time that is in their line
+			this.inititateServersWithLine(servers, lines,numOfservers);
 			
-			if(!this.arrivalQueue.isEmpty()) {
-				this.assignToLine(clerks);
-				Customer[] cAtLine = new Customer[numOfServ];
-				for(int i = 0; i< numOfServ; i ++) {
-					cAtLine[i] = clerks[i].peekFirstInLine();
-				if(cAtLine[i].getArrival()>= servedTime && this.serviceQueue.size()!= this.numOfValidLines(clerks)) {
-					this.serviceQueue.enqueue(clerks[i].nextCustomer());
-				}
-				}
+			totalTime=0;
+			while(serviceCompletedEvent.size() != numberOfCustomers ) {
+				this.addCustomerToLine(totalTime, ArrivingCustomers, lines);
 			}
-			
-			if(!serviceQueue.isEmpty()) {
-				Customer c1 = this.serviceQueue.first();
-				c1.setServiceTime(c1.getServiceTime()-1);
-				if(c1.getServiceTime()==0) {
-					this.departureQueue.enqueue(this.serviceQueue.dequeue());
-				}else {
-					this.serviceQueue.enqueue(this.serviceQueue.dequeue());
-				}
 
-			}
-			
+	
+	
+}
+
+//This method Adds The customer to the Line with the lowest amount of people when they arrived
+private void reachedLine(ArrayList<WaitingLine> lines,Customer c, long time) {
+	WaitingLine l0 = lines.get(0);
+	if(c.getArrival()<= time) {
+	for(WaitingLine l : lines) {
+		if(l.numOfCustomersWaiting()<l0.numOfCustomersWaiting()) {
+			l0 = l;
 		}
-		
-		servedTime++;
+	}
+	l0.add(c);
 	}
 	
-		// this method assigns a customer to the line with the lowest amount of customers
-	    public void assignToLine(Server[] line){
-	    	int index = 0;
-	    	if(!arrivalQueue.isEmpty()){
-	    		
-	        	
-	        	for(int i=1;i<line.length;i++){
-	        		if(line[i].lineLength() < line[i-1].lineLength()){
-	        			index = i;
-	        		}
-	        	}
-	        	
-	        	line[index].add(arrivalQueue.dequeue());
-	    	}
+}
+private void addCustomerToLine(long time,ArrayList<Customer> ArrivingCustomers,ArrayList<WaitingLine> lines) {
+	for(Customer c: ArrivingCustomers) {
+		this.reachedLine(lines, c, time);
 	}
-		
-	
-
-	
-	public int numOfValidLines(Server[] clerks) {
-		int counter = 0;
-		for(int i = 0; i< clerks.length;i++) {
-			if(clerks[i].isThereLine()) {
-				counter ++;
-			}
-		}
-		return counter;
-		
+}
+private void inititateServersWithLine(ArrayList<Server> servers,ArrayList<WaitingLine> lines, int n) {
+	int i = 0;
+	while(i<n) {
+		servers.add(new Server());
+		lines.add(new WaitingLine());
+		i++;
 	}
-	public int getsServedTime() {
-		return servedTime;
-	}
-
+}
 
 }
