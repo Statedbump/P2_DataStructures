@@ -31,22 +31,25 @@ public class SLMS {
 		while(!line.isEmpty() || serviceCompletedEvent.size() != numberOfCustomers ) {
 
 			if(!line.isEmpty()) {
-
 				for(Server s: servers) {
 					//System.out.println(totalTime);
-					if(!s.isServing() &&  totalTime >= line.first().getArrival()) {
+					if(!s.isServing() &&  totalTime >= line.first().getArrival()){
 //						System.out.println("Started Serving Customer at time = " + totalTime);
 						sumOfWaiting = sumOfWaiting +(totalTime-line.first().getArrival());
 						s.add(line.next());
-						if(!line.isEmpty()){
-							if(s.attending().getArrival()==line.first().getArrival()){
-								s.add(line.next());
-							}
+						if(!line.isEmpty() && s.attending().getArrival() == line.first().getArrival() && s != null) {
+
+							
+						}else {
+							break;
 						}
-						break;
+						
 					}
+					
 				}
-			}
+					
+				}
+
 
 			if(serviceCompletedEvent.size() != numberOfCustomers) {
 				for(Server s : servers) {
