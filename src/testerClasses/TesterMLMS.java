@@ -7,19 +7,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import customers.Customer;
-import waitingPolicies.SLMS;
+import waitingPolicies.MLMS;
 
-public class TesterSLMS {
+
+public class TesterMLMS {
 
 	public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException {
 		String directory = "inputFiles";
-		String file = "data_5.txt";
+		String file = "data_0.txt";
 		Scanner scanner = new Scanner(new File(directory, file));
 		long arrivalTime, serviceTime;
 		int numOfServers = 1;
 		ArrayList<Customer> list = new ArrayList<>();
 		ArrayList<Customer> list2 = new ArrayList<>();
-		SLMS[] policy1 = new SLMS[3];
+		MLMS[] policy1 = new MLMS[3];
+		
 		initializePolicies(policy1);
 		while(scanner.hasNextInt()){
 			arrivalTime = scanner.nextInt();
@@ -87,10 +89,11 @@ public class TesterSLMS {
 	//  		return totalTime;
 	//	}
 
-	public static void initializePolicies(SLMS[]policy1) {
+	public static void initializePolicies(MLMS[]policy1 ) {
 		for(int i = 0; i< 3;i++) {
 			
-			policy1[i]= new SLMS();
+			policy1[i]= new MLMS();
+			
 			
 		}
 	}

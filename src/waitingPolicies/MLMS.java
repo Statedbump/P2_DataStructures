@@ -11,7 +11,7 @@ import implementations.LinkedQueue;
 
 public class MLMS {
 
-	private WaitingLine line;
+
 	private LinkedQueue<Customer>serviceCompletedEvent;
 	private long totalTime;
 	private double sumOfWaiting;
@@ -19,7 +19,7 @@ public class MLMS {
 	public MLMS () {
 		
 		serviceCompletedEvent = new LinkedQueue<>();
-		
+		totalTime =0;
 		
 	}
 	
@@ -31,10 +31,41 @@ public void performService(int numOfservers,ArrayList<Customer> ArrivingCustomer
 			// Servers can now begin attending Customers one at a Time that is in their line
 			this.inititateServersWithLine(servers, lines,numOfservers);
 			
-			totalTime=0;
+			//System.out.println("This Works");
 			while(serviceCompletedEvent.size() != numberOfCustomers ) {
+			//	System.out.println("This Works");
 				this.addCustomerToLine(totalTime, ArrivingCustomers, lines);
+				
+				
+				for(Server s : servers) {
+					
+					if(!s.isServing() && !lines.get(servers.indexOf(s)).isEmpty()) {
+						//System.out.println("Started Serving Customer at time = " + totalTime);
+						Customer c = lines.get(servers.indexOf(s)).next();
+						s.add(c);
+					}
+				}
+				
+				if(serviceCompletedEvent.size() != numberOfCustomers) {
+					for(Server s: servers) {
+					if(s.isServing()) {
+						s.attending().setServiceTime(s.attending().getServiceTime()-1);
+						
+						if(s.attending().getServiceTime()==0) {
+							Customer c = s.nextCustomer();
+							c.resetServiceTime();
+							//							c.setDeparture(totalTime);
+							serviceCompletedEvent.enqueue(c);	
+						}
+					}
+				}
+					
+				}
+				
+				//System.out.println(totalTime);
+				
 			}
+			//System.out.println(totalTime);
 
 	
 	
@@ -65,6 +96,15 @@ private void inititateServersWithLine(ArrayList<Server> servers,ArrayList<Waitin
 		lines.add(new WaitingLine());
 		i++;
 	}
+}
+public double getAverageWaiting(){
+	return sumOfWaiting/serviceCompletedEvent.size();
+}
+public double getTotalWaitingTime(){
+	return sumOfWaiting;
+}
+public long getsTotalTime() {
+	return totalTime;
 }
 
 }
