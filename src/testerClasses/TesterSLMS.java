@@ -29,15 +29,18 @@ public class TesterSLMS {
 				System.out.println(file);
 				Scanner scanner2;
 				try {
+					try{
 					scanner2 = new Scanner(new File(directory, file));
 					SLMS[] policy1 = new SLMS[3];
 					initializePolicies(policy1);
 					while(scanner2.hasNextInt()){
-						arrivalTime = scanner2.nextInt();
-						serviceTime =scanner2.nextInt();
-						Customer customer = new Customer(0, arrivalTime, serviceTime);
-						list.add(customer); 
-					}
+							arrivalTime = scanner2.nextInt();
+							serviceTime =scanner2.nextInt();
+							Customer customer = new Customer(0, arrivalTime, serviceTime);
+							list.add(customer); 
+						}
+					
+					
 					scanner2.close();
 					out.println("-----------------------------------"); 
 					for(int i =0; i<3 ; i++) {
@@ -49,6 +52,10 @@ public class TesterSLMS {
 						numOfServers+=2;
 					}
 					out.println("-----------------------------------");
+					}
+					catch (NumberFormatException c){
+						out.println("Hi");
+					}
 				} catch (FileNotFoundException e) {
 					out.println("Input file not found.");
 				}
@@ -60,7 +67,7 @@ public class TesterSLMS {
 			System.out.println("The directory path specified was not found");
 		}
 	}
-	public static ArrayList<Customer> copyList(ArrayList<Customer> list){
+	private static ArrayList<Customer> copyList(ArrayList<Customer> list){
 		ArrayList<Customer> list2 = new ArrayList<>();
 		for(Customer E: list){
 			list2.add(E);
@@ -68,7 +75,7 @@ public class TesterSLMS {
 		return list2;
 	}
 
-	public static void initializePolicies(SLMS[]policy1) {
+	private static void initializePolicies(SLMS[]policy1) {
 		for(int i = 0; i< 3;i++) {
 			policy1[i]= new SLMS();
 		}
