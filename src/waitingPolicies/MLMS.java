@@ -1,19 +1,21 @@
+//Kelvin Garcia Muñiz || Luis Cintrón Zayas
+//802142644 || StudentNumberHere
+//CIIC4020 - 030
 package waitingPolicies;
 
 import java.util.LinkedList;
-
 import customers.Customer;
 import customers.Server;
 
 //Multiple Lines Multiple Servers
 public class MLMS {
 
-	int numOfServers, numOfCustomers;
-	double totalTime=-1;
-	private double averageTime=0;
-	private LinkedList<Customer> arrivingCustomers;
-	private LinkedList<Customer> waitingList;
-	private Server[]servers;
+	int numOfServers, numOfCustomers; 
+	double totalTime = -1; // counts the current time of the simulation (begins in time 0)
+	private double totalWaitingTime = 0; //total time waited by each customer 
+	private LinkedList<Customer> arrivingCustomers; // customers to served
+	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
+	private Server[]servers; // array of servers
 
 	/**
 	 * Constructor
@@ -25,8 +27,8 @@ public class MLMS {
 		this.arrivingCustomers=copy(customers);
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
-		this.waitingList=new LinkedList<>();
-		 initializeServers();	
+		this.waitingLine=new LinkedList<>();
+		initializeServers(); // run the server init with the specified number	
 	}
 	
 	/**
@@ -34,7 +36,7 @@ public class MLMS {
 	 */
 	public void initializeServers() {
 		for(int i=0;i<numOfServers;i++) {
-			servers[i]=new Server();
+			servers[i]=new Server(); 
 		}
 	}
 	
@@ -42,16 +44,26 @@ public class MLMS {
 	 * performs the service with a MLMS waiting policy
 	 */
 	public void Service() {
+		//for each server c 
 		for(Server c: servers) {
+			// if there are servers in line
 			if(c.lineLength()!=0) {
+				// if the servers has not finished with the customer
 				if(c.attending().getServiceTime()!=0) {
+					// remove one unit of time from the service time
 					c.attending().setServiceTime(c.attending().getServiceTime()-1);
+					// increase a unit of time from the departure
 					c.attending().setDeparture(c.attending().getDeparture()+1);
 				}
+				// if the server finished serving the customer
 				if(c.attending().getServiceTime()==0) {
+					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
-					tr.setDeparture((int)totalTime-tr.getArrival());
-					averageTime=averageTime+tr.getDeparture();
+					// set the waiting time (= current time - the arrival time of that customer)
+					tr.setTimeWaiting((int)totalTime-tr.getArrival());
+					// add the waiting time to the total Waiting time
+					totalWaitingTime=totalWaitingTime+tr.getTimeWaiting();
+					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
 				}
 			}
@@ -62,14 +74,21 @@ public class MLMS {
 	 * Begins the simulation
 	 */
 	public void performService() {
+		// while the service has not finished (there are customers to be served)
 		while(!isEmpty()) {
+			// increase the total time by 1 unit
 			totalTime++;
+			// for each customer c
 			for(Customer c: arrivingCustomers) {
+				// if the time of arrival is equal to the current time
 				if(c.getArrival()==totalTime) {
-					waitingList.add(c);
+					// add that customer to the waiting line
+					waitingLine.add(c);
 				}
 			}
+			// add the customer to a server with fewer customers
 			addToServerAvailable();
+			// perform the service
 			Service();
 		}	
 	}
@@ -79,13 +98,17 @@ public class MLMS {
 	 */
 	public void addToServerAvailable() {
 		int index=0;
-
+		
 		for(int i=1;i<servers.length;i++) {
+			// if the line served by the current server is smaller than the line of the first server
 			if(servers[i].lineLength()<servers[0].lineLength())
+				// the smallest line is the line of that server
 				index=i;
 		}
-		if(!waitingList.isEmpty()){
-			servers[index].add(waitingList.removeFirst());
+		// if there are customers in line
+		if(!waitingLine.isEmpty()){
+			//add that customer to the server with fewest people in line
+			servers[index].add(waitingLine.removeFirst());
 		}
 	}
 
@@ -96,9 +119,12 @@ public class MLMS {
 	 */
 	private LinkedList<Customer> copy(LinkedList<Customer>arrivingCustomers) {
 		LinkedList<Customer> copy= new LinkedList<>();
+		// for each customer c
 		for(Customer c: arrivingCustomers) {
+			//add that customer to the copy
 			copy.add(new Customer(c.getArrival(),c.getServiceTime()));
 		}
+		// return the copy
 		return copy;
 	}
 
@@ -107,7 +133,8 @@ public class MLMS {
 	 * @return
 	 */
 	public double getAverageTime() {
-		return averageTime/numOfCustomers;
+		// average time waited = total time waited / number of customers
+		return totalWaitingTime/numOfCustomers;
 	}
 	
 	/**
