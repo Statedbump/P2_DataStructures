@@ -8,8 +8,10 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 import customers.Customer;
+import waitingPolicies.MLMS;
 import waitingPolicies.SLMS;
 
 /**
@@ -25,8 +27,8 @@ public class Main {
 		Scanner scanner; // reads the dataFiles from dataFiles.txt
 		Scanner scanner2; // reads each data file listed in dataFiles.txt
 		SLMS[] policy1 = new SLMS[3]; //SLMS policy
-		ArrayList<Customer> list = new ArrayList<>(); 
-		ArrayList<Customer> list2 = new ArrayList<>(); // used as a copy of list
+		LinkedList<Customer> list = new LinkedList<>(); 
+		LinkedList<Customer> list2 = new LinkedList<>(); // used as a copy of list
 		NumberFormat formatter = new DecimalFormat("#0.00"); //formats the output to 2 decimal numbers
 		int counter=0, numOfServers = 1; //counter used to keep track of the file name && default number of servers
 		final int numOfTests = 3; // the number of tests to be performed 
@@ -54,8 +56,17 @@ public class Main {
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list
 						policy1[i].performService(numOfServers, list2); // performs service with the respective num of servers
-						out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t" + 
+						out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t\t" + 
 								formatter.format(policy1[i].getAverageWaiting())); // prints the output on its respective file
+						numOfServers+=2; //increase the number of servers by 2
+					}
+					numOfServers =1; // resets the number of servers
+					for(int i =0; i<numOfTests ; i++) { //runs three tests
+						list2 = copyList(list); //makes a copy of the list
+						MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
+						policy2.performService(); // performs service
+						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t" + 
+						formatter.format(policy2.getAverageTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------");
@@ -76,8 +87,8 @@ public class Main {
 	 * @param list
 	 * @return 
 	 */
-	private static ArrayList<Customer> copyList(ArrayList<Customer> list){
-		ArrayList<Customer> list2 = new ArrayList<>();
+	private static LinkedList<Customer> copyList(LinkedList<Customer> list){
+		LinkedList<Customer> list2 = new LinkedList<>();
 		// for each customer in list
 		for(Customer E: list){
 			// add the customer to the copy

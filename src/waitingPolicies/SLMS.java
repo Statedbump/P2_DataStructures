@@ -3,6 +3,8 @@
 //CIIC4020 - 030
 package waitingPolicies;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import customers.Server;
 import customers.Customer;
 import customers.WaitingLine;
@@ -29,7 +31,7 @@ public class SLMS {
 	 * @param numOfservers - number of servers in the operation
 	 * @param ArrivingCustomers - the customers to be served
 	 */
-	public void performService(int numOfservers, ArrayList<Customer> ArrivingCustomers) {
+	public void performService(int numOfservers, LinkedList<Customer> ArrivingCustomers) {
 		// The simulation will stop when there are no more customers being served or to be served
 		this.numberOfCustomers = ArrivingCustomers.size(); //sets the number of customers for this simulation
 		ArrayList<Server> servers = new ArrayList<>();
@@ -95,9 +97,9 @@ public class SLMS {
 	 * @param ArrivingCustomers - the customers to be served
 	 * @return line containing all the customers to be served
 	 */
-	private WaitingLine addCustomersToLine(ArrayList<Customer> ArrivingCustomers) {
+	private WaitingLine addCustomersToLine(LinkedList<Customer> ArrivingCustomers) {
 		WaitingLine line = new WaitingLine();
-		ArrayList<Customer> temp = new ArrayList<>(); //used to keep the original ArrivingCustomers list
+		LinkedList<Customer> temp = new LinkedList<>(); //used to keep the original ArrivingCustomers list
 		// while there are customers
 		while( !ArrivingCustomers.isEmpty()) {
 			Customer e = ArrivingCustomers.get(0);
