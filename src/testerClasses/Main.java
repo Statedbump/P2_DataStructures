@@ -7,11 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 import customers.Customer;
 import waitingPolicies.MLMS;
+import waitingPolicies.MLMSBWT;
 import waitingPolicies.SLMS;
 
 /**
@@ -56,7 +56,7 @@ public class Main {
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list
 						policy1[i].performService(numOfServers, list2); // performs service with the respective num of servers
-						out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t\t" + 
+						out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t\t\t" + 
 								formatter.format(policy1[i].getAverageWaiting())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
@@ -65,8 +65,17 @@ public class Main {
 						list2 = copyList(list); //makes a copy of the list
 						MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
 						policy2.performService(); // performs service
-						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t" + 
+						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t\t" + 
 						formatter.format(policy2.getAverageTime())); // prints the output on its respective file
+						numOfServers+=2; //increase the number of servers by 2
+					}
+					numOfServers =1; // resets the number of servers
+					for(int i =0; i<numOfTests ; i++) { //runs three tests
+						list2 = copyList(list); //makes a copy of the list
+						MLMSBWT policy3= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
+						policy3.performService(); // performs service
+						out.println("MLMSBWT " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
+						formatter.format(policy3.getAverageTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------");

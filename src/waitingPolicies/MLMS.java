@@ -91,6 +91,7 @@ public class MLMS {
 			// perform the service
 			Service();
 		}	
+		totalTime++;
 	}
 
 	/**

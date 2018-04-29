@@ -15,7 +15,7 @@ public class Customer {
 	private long waitingTime;
 	private long departureTime;	//sets the time the costumer left
 	private long old;
-	int m;
+	int m, line;
 	
 	/**
 	 * Default Constructor
@@ -34,6 +34,7 @@ public class Customer {
 //		this.ID = ID;
 		this.arrivalTime = arrivalTime;
 		this.serviceTime = serviceTime;
+		this.line = 0;
 		old = serviceTime;
 		isServed = false;
 	}
@@ -132,6 +133,10 @@ public class Customer {
 		m++; 
 	}
 	
+	public long getM(){
+		return m;
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -149,6 +154,15 @@ public class Customer {
 		
 	}
 
-
+	public void setLine(int line){
+		this.line = line;
+	}
+	
+	public int getNumLine(){
+		return line;
+	}
+	
+	
+	
 }
 

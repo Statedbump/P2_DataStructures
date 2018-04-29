@@ -11,7 +11,7 @@ import implementations.LinkedQueue;
  */
 public class Server {
 private LinkedQueue<Customer> lineQueue;
-	
+	long time;
 	/**
 	 * Server Constructor
 	 */
@@ -57,5 +57,22 @@ private LinkedQueue<Customer> lineQueue;
 	 */
 	public int lineLength(){
 		return lineQueue.size();
+	}
+	
+	public boolean isEmpty(){
+		return !lineQueue.isEmpty();
+	}
+	
+	public Customer peekFirstInLine(){
+		return lineQueue.first();
+	}
+	
+	public void setWaitingCustTime(long time){
+		this.time += time;
+	}
+
+
+	public long getWaitingCustTime() {
+		return time;
 	}
 }
