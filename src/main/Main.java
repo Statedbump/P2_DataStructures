@@ -1,7 +1,7 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
 //802142644 || StudentNumberHere
 //CIIC4020 - 030
-package testerClasses;
+package main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -30,7 +30,7 @@ public class Main {
 		LinkedList<Customer> list = new LinkedList<>(); 
 		LinkedList<Customer> list2 = new LinkedList<>(); // used as a copy of list
 		NumberFormat formatter = new DecimalFormat("#0.00"); //formats the output to 2 decimal numbers
-		int counter=0, numOfServers = 1; //counter used to keep track of the file name && default number of servers
+		int counter=0, numOfServers; //counter used to keep track of the file name && number of servers
 		final int numOfTests = 3; // the number of tests to be performed 
 		long arrivalTime, serviceTime; // the arrival and service time of each customer
 		try { //begins try/catch 1
@@ -53,6 +53,7 @@ public class Main {
 					}
 					scanner2.close(); //close scanner2
 					out.println("-----------------------------------"); 
+					numOfServers = 1;
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list
 						policy1[i].performService(numOfServers, list2); // performs service with the respective num of servers
@@ -60,6 +61,7 @@ public class Main {
 								formatter.format(policy1[i].getAverageWaiting())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
+					out.println("-----------------------------------"); 
 					numOfServers =1; // resets the number of servers
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list
@@ -69,6 +71,7 @@ public class Main {
 						formatter.format(policy2.getAverageTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
+					out.println("-----------------------------------"); 
 					numOfServers =1; // resets the number of servers
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list

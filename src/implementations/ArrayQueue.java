@@ -6,29 +6,52 @@ import java.util.Arrays;
 
 import interfaces.Queue;
 
+/**
+ * Array implementation of Queues
+ * @author Kelvin Garcia & Luis Cintrón
+ *
+ * @param <E>
+ */
 public class ArrayQueue<E> implements Queue<E> {
 	private final static int INITCAP = 4; 
 	private E[] elements; 
 	private int first, size; 
 	@SuppressWarnings("unchecked")
+	
+	/**
+	 * Constructor
+	 */
 	public ArrayQueue() { 
 		elements = (E[]) new Object[INITCAP]; 
 		first = 0; 
 		size = 0; 
 	}
+	
+	/**
+	 * returns the size of the queue
+	 */
 	public int size() {
 		return size;
 	}
 
+	/**
+	 * true if the queue is empty
+	 */
 	public boolean isEmpty() {
 		return size == 0;
 	}
 
+	/**
+	 * returns the first element in the queue
+	 */
 	public E first() {
 		if (isEmpty()) return null; 
 		return elements[first]; 
 	}
 
+	/**
+	 * removes the first element in the queue
+	 */
 	public E dequeue() {
 		if (isEmpty()) return null;
 		E etr = elements[first]; 
@@ -44,6 +67,9 @@ public class ArrayQueue<E> implements Queue<E> {
 		return etr; 
 	}
 
+	/**
+	 * adds a new element to the queue
+	 */
 	public void enqueue(E e) {
 		if (size == elements.length)   // check capacity, double it if needed
 			changeCapacity(2*size); 
@@ -51,6 +77,10 @@ public class ArrayQueue<E> implements Queue<E> {
 		size++;
 	}
 
+	/**
+	 * changes the capacity of the queue to the specified parameter
+	 * @param newCapacity
+	 */
 	private void changeCapacity(int newCapacity) { 
 		// PRE: newCapacity >= size
 		@SuppressWarnings("unchecked")
@@ -62,6 +92,10 @@ public class ArrayQueue<E> implements Queue<E> {
 		elements = newArr;
 		first=0;
 	}
+	
+	/**
+	 * used to print the elements in the queue
+	 */
 	public String toString(){
 		return Arrays.toString(elements);
 	}

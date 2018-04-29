@@ -4,8 +4,7 @@
 package interfaces;
 
 public interface Deque<E> {
-
-
+	
 	//Returns the number of elements in the deque. 
 	int size();
 	// Tests whether the deque is empty. ∗/ 
@@ -18,12 +17,9 @@ public interface Deque<E> {
 	void addFirst(E e);
 	//Inserts an element at the back of the deque
 	void addLast(E e);
-	
 	//Removes and returns the first element of the deque (null if empty)
 	E removeFirst(); 
 	//Removes and returns the last element of the deque (null if empty).
 	E removeLast();
-
-
-
+	
 }

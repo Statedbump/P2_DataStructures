@@ -133,6 +133,10 @@ public class Customer {
 		m++; 
 	}
 	
+	/**
+	 * Returns the value m
+	 * @return
+	 */
 	public long getM(){
 		return m;
 	}
@@ -153,16 +157,6 @@ public class Customer {
 		this.waitingTime = currentTime - this.arrivalTime;
 		
 	}
-
-	public void setLine(int line){
-		this.line = line;
-	}
-	
-	public int getNumLine(){
-		return line;
-	}
-	
-	
 	
 }
 

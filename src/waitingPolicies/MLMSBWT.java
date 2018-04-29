@@ -30,7 +30,7 @@ public class MLMSBWT {
 		this.waitingLine=new LinkedList<>();
 		initializeServers(); // run the server init with the specified number	
 	}
-	
+
 	/**
 	 * initializes the servers with the specified number of servers
 	 */
@@ -39,7 +39,7 @@ public class MLMSBWT {
 			servers[i]=new Server(); 
 		}
 	}
-	
+
 	/**
 	 * performs the service with a MLMS waiting policy
 	 */
@@ -69,7 +69,7 @@ public class MLMSBWT {
 			}
 		}
 	}
-	
+
 	/**
 	 * Begins the simulation
 	 */
@@ -86,12 +86,12 @@ public class MLMSBWT {
 					waitingLine.add(c);
 				}
 			}
-			// add the customer to a server with fewer customers
+			// add the customer to a server with least waiting time
 			addToServerAvailable();
 			// perform the service
 			Service();
 		}
-		totalTime++;
+		totalTime++; // increases time by one last unit
 	}
 
 	/**
@@ -99,7 +99,6 @@ public class MLMSBWT {
 	 */
 	public void addToServerAvailable() {
 		int index=0;
-		
 		for(int i=1;i<servers.length;i++) {
 			// if the line served by the current server is smaller than the line of the first server
 			if(servers[i].getWaitingCustTime()<servers[0].getWaitingCustTime())
@@ -108,13 +107,12 @@ public class MLMSBWT {
 		}
 		// if there are customers in line
 		if(!waitingLine.isEmpty()){
-			//add that customer to the server with fewest people in line
-			servers[index].add(waitingLine.removeFirst());
-			servers[index].setWaitingCustTime(totalTime - servers[index].peekFirstInLine().getArrival());
-			System.out.println(index+" "+servers[index].lineLength());
+			long custTime = waitingLine.getFirst().getServiceTime(); //service time of the customer
+			servers[index].add(waitingLine.removeFirst()); //add the customer to the server
+			servers[index].setWaitingCustTime(custTime); // add the service time of that customer to the service line
 		}
 	}
-
+	
 	/**
 	 * Returns a copy of the arriving customers
 	 * @param arrivingCustomers
@@ -139,7 +137,7 @@ public class MLMSBWT {
 		// average time waited = total time waited / number of customers
 		return totalWaitingTime/numOfCustomers;
 	}
-	
+
 	/**
 	 * returns the number of Customers to be served
 	 * @return
@@ -147,7 +145,7 @@ public class MLMSBWT {
 	public int numberOfCustomer() {
 		return numOfCustomers;
 	}
-	
+
 	/**
 	 * returns the total time taken to serve all the customers
 	 * @return
@@ -155,7 +153,7 @@ public class MLMSBWT {
 	public double getTotalTime() {
 		return totalTime;
 	}
-	
+
 	/**
 	 * returns true if all the customers have been served
 	 * @return

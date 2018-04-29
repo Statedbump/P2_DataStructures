@@ -10,7 +10,7 @@ import implementations.LinkedQueue;
  * @author Kelvin Garcia & Luis Cintrón
  */
 public class Server {
-private LinkedQueue<Customer> lineQueue;
+	private LinkedQueue<Customer> lineQueue;
 	long time;
 	/**
 	 * Server Constructor
@@ -18,7 +18,7 @@ private LinkedQueue<Customer> lineQueue;
 	public Server(){
 		lineQueue = new LinkedQueue<Customer>();
 	}
-	
+
 	/**
 	 * Return true is the server is serving a customer
 	 * @return
@@ -26,7 +26,7 @@ private LinkedQueue<Customer> lineQueue;
 	public boolean isServing(){
 		return lineQueue.size()==1;
 	}
-	
+
 	/**
 	 * adds the client to the server
 	 * @param client
@@ -34,7 +34,7 @@ private LinkedQueue<Customer> lineQueue;
 	public void add(Customer client){
 		lineQueue.enqueue(client);
 	}
-	
+
 	/**
 	 * returns the customer being served
 	 * @return
@@ -50,7 +50,7 @@ private LinkedQueue<Customer> lineQueue;
 	public Customer nextCustomer(){
 		return lineQueue.dequeue();
 	}
-	
+
 	/**
 	 * returns the length of the line
 	 * @return
@@ -58,20 +58,35 @@ private LinkedQueue<Customer> lineQueue;
 	public int lineLength(){
 		return lineQueue.size();
 	}
-	
+
+	/**
+	 * returns true if there are no customers in the line
+	 * @return
+	 */
 	public boolean isEmpty(){
 		return !lineQueue.isEmpty();
 	}
-	
+
+	/**
+	 * returns the first customer in the line
+	 * @return
+	 */
 	public Customer peekFirstInLine(){
 		return lineQueue.first();
 	}
-	
+
+	/**
+	 * sets the wainting time of the server's line
+	 * @param time
+	 */
 	public void setWaitingCustTime(long time){
 		this.time += time;
 	}
 
-
+	/**
+	 * returns the sum of all waiting times of all customers
+	 * @return
+	 */
 	public long getWaitingCustTime() {
 		return time;
 	}

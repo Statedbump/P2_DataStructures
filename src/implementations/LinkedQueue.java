@@ -15,7 +15,7 @@ public class LinkedQueue<E> implements Queue<E> {
 	private static class Node<E> {
 		private E element; 
 		private Node<E> next;
-		
+
 		/**
 		 * Constructor
 		 * @param e
@@ -24,7 +24,7 @@ public class LinkedQueue<E> implements Queue<E> {
 			element = e;
 			next = null;
 		}
-		
+
 		/**
 		 * returns element at node
 		 * @return
@@ -32,7 +32,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		public E getElement() {
 			return element;
 		}
-		
+
 		/**
 		 * returns the next node
 		 * @return
@@ -40,7 +40,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		public Node<E> getNext() {
 			return next;
 		}
-		
+
 		/**
 		 * sets the next node to the specified value
 		 * @param next
@@ -48,11 +48,11 @@ public class LinkedQueue<E> implements Queue<E> {
 		public void setNext(Node<E> next) {
 			this.next = next;
 		}
-		
+
 	}	
 	private Node<E> first, last;   // references to first and last node
 	private int size; 
-	
+
 	/**
 	 * Constructor
 	 */
@@ -60,7 +60,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		first = last = null; 
 		size = 0; 
 	}
-	
+
 	/**
 	 * returns the size of the queue
 	 */
@@ -68,7 +68,7 @@ public class LinkedQueue<E> implements Queue<E> {
 	public int size() {
 		return size;
 	}
-	
+
 	/**
 	 * returns true if the queue is empty
 	 */
@@ -76,7 +76,7 @@ public class LinkedQueue<E> implements Queue<E> {
 	public boolean isEmpty() {
 		return size == 0;
 	}
-	
+
 	/**
 	 * returns the first element of the queue
 	 */
@@ -85,7 +85,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		if (isEmpty()) return null;
 		return first.getElement(); 
 	}
-	
+
 	/**
 	 * removes the element of the queue
 	 * @return element removed
@@ -103,7 +103,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		E etr = ntr.getElement();
 		return etr;
 	}
-	
+
 	/**
 	 * adds an element to the queue
 	 */
@@ -118,7 +118,7 @@ public class LinkedQueue<E> implements Queue<E> {
 		}
 		size++; 
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -126,31 +126,31 @@ public class LinkedQueue<E> implements Queue<E> {
 		Node<E> fn = first;
 		String s = "{";
 		boolean temporary = true;
-				if(isEmpty())
-					return "{ }";
-				
-				while(fn!= null) {
-					if(temporary == true) {
-						s = s + fn.getElement();
-						temporary = false;
-					}else {
-						s = s + "," +  fn.getElement();
-					}
-					fn = fn.getNext();
-				}
-				return s + "}" ;
+		if(isEmpty())
+			return "{ }";
+
+		while(fn!= null) {
+			if(temporary == true) {
+				s = s + fn.getElement();
+				temporary = false;
+			}else {
+				s = s + "," +  fn.getElement();
+			}
+			fn = fn.getNext();
+		}
+		return s + "}" ;
 	}
-	
+
 	/**
 	 * Creates a clone of the queue
 	 * @throws CloneNotSupportedException
 	 */
 	public LinkedQueue<E> clone() throws CloneNotSupportedException {			
-		
+
 		LinkedQueue<E> copy = new LinkedQueue<E>();
 		Node<E> current = first;
 		E etr;
-		
+
 		while(current != null){
 			etr = current.element;
 			copy.enqueue(etr);
