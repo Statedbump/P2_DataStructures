@@ -1,106 +1,136 @@
-
 package waitingPolicies;
 
-import customers.Server;
-import customers.WaitingLine;
-
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import customers.Customer;
-import implementations.ArrayQueue;
-import implementations.LinkedQueue;
+import customers.Server;
 
+//Multiple Lines Multiple Servers
 public class MLMS {
 
+	int numOfServers, numOfCustomers;
+	double totalTime=-1;
+	private double averageTime=0;
+	private LinkedList<Customer> arrivingCustomers;
+	private LinkedList<Customer> waitingList;
+	private Server[]servers;
 
-	private LinkedQueue<Customer>serviceCompletedEvent;
-	private long totalTime;
-	private double sumOfWaiting;
-
-	public MLMS () {
-
-		serviceCompletedEvent = new LinkedQueue<>();
-		totalTime =0;
-
+	/**
+	 * Constructor
+	 * @param customers
+	 * @param numberOfServers
+	 */
+	public MLMS(LinkedList<Customer> customers,int numberOfServers) {
+		this.numOfCustomers=customers.size();
+		this.arrivingCustomers=copy(customers);
+		this.numOfServers=numberOfServers;
+		this.servers=new Server[numberOfServers];
+		this.waitingList=new LinkedList<>();
+		 initializeServers();	
 	}
-
-	public void performService(int numOfservers,ArrayList<Customer> ArrivingCustomers) {
-		// The simulation will stop when there are no more customers left in both ArrivalQueue and Service Queue
-				int numberOfCustomers = ArrivingCustomers.size();
-				ArrayList<Server> servers = new ArrayList<>();
-				ArrayList<WaitingLine> lines =  new ArrayList<>();
-				// Servers can now begin attending Customers one at a Time that is in their line
-				this.inititateServersWithLine(servers, lines,numOfservers);
-
-				while(serviceCompletedEvent.size() != numberOfCustomers ) {
-
-					this.addCustomerToLine(totalTime, ArrivingCustomers, lines);
-
-
-					for(Server s : servers) {
-						if(!s.isServing() && !lines.get(servers.indexOf(s)).isEmpty()) {
-							//System.out.println("Started Serving Customer at time = " + totalTime);
-							Customer c = lines.get(servers.indexOf(s)).next();
-							s.add(c);
-							sumOfWaiting = sumOfWaiting +(totalTime-s.attending().getArrival());
-						}
-					}
-
-					if(serviceCompletedEvent.size() != numberOfCustomers) {
-						for(Server s: servers) {
-							if(s.isServing()) {
-								s.attending().setServiceTime(s.attending().getServiceTime()-1);
-
-								if(s.attending().getServiceTime()==0) {
-									Customer c = s.nextCustomer();
-									c.resetServiceTime();
-									//							c.setDeparture(totalTime);
-									serviceCompletedEvent.enqueue(c);	
-								}
-							}
-						}
-					}
-					//System.out.println(totalTime);
-					totalTime++;
+	
+	/**
+	 * initializes the servers with the specified number of servers
+	 */
+	public void initializeServers() {
+		for(int i=0;i<numOfServers;i++) {
+			servers[i]=new Server();
+		}
+	}
+	
+	/**
+	 * performs the service with a MLMS waiting policy
+	 */
+	public void Service() {
+		for(Server c: servers) {
+			if(c.lineLength()!=0) {
+				if(c.attending().getServiceTime()!=0) {
+					c.attending().setServiceTime(c.attending().getServiceTime()-1);
+					c.attending().setDeparture(c.attending().getDeparture()+1);
 				}
-				//System.out.println(totalTime);
-
-	}
-
-	//This method Adds The customer to the Line with the lowest amount of people when they arrived
-	private void reachedLine(ArrayList<WaitingLine> lines,Customer c, long time) {
-		WaitingLine l0 = lines.get(0);
-		if(c.getArrival()<= time) {
-			for(WaitingLine l : lines) {
-				if(l.numOfCustomersWaiting()<l0.numOfCustomersWaiting()) {
-					l0 = l;
+				if(c.attending().getServiceTime()==0) {
+					Customer tr=c.nextCustomer();
+					tr.setDeparture((int)totalTime-tr.getArrival());
+					averageTime=averageTime+tr.getDeparture();
+					arrivingCustomers.remove(tr);
 				}
 			}
-			l0.add(c);
 		}
+	}
+	
+	/**
+	 * Begins the simulation
+	 */
+	public void performService() {
+		while(!isEmpty()) {
+			totalTime++;
+			for(Customer c: arrivingCustomers) {
+				if(c.getArrival()==totalTime) {
+					waitingList.add(c);
+				}
+			}
+			addToServerAvailable();
+			Service();
+		}	
+	}
 
-	}
-	private void addCustomerToLine(long time,ArrayList<Customer> ArrivingCustomers,ArrayList<WaitingLine> lines) {
-		for(Customer c: ArrivingCustomers) {
-			this.reachedLine(lines, c, time);
+	/**
+	 * Adds the customer to an available server
+	 */
+	public void addToServerAvailable() {
+		int index=0;
+
+		for(int i=1;i<servers.length;i++) {
+			if(servers[i].lineLength()<servers[0].lineLength())
+				index=i;
+		}
+		if(!waitingList.isEmpty()){
+			servers[index].add(waitingList.removeFirst());
 		}
 	}
-	private void inititateServersWithLine(ArrayList<Server> servers,ArrayList<WaitingLine> lines, int n) {
-		int i = 0;
-		while(i<n) {
-			servers.add(new Server());
-			lines.add(new WaitingLine());
-			i++;
+
+	/**
+	 * Returns a copy of the arriving customers
+	 * @param arrivingCustomers
+	 * @return
+	 */
+	private LinkedList<Customer> copy(LinkedList<Customer>arrivingCustomers) {
+		LinkedList<Customer> copy= new LinkedList<>();
+		for(Customer c: arrivingCustomers) {
+			copy.add(new Customer(c.getArrival(),c.getServiceTime()));
 		}
+		return copy;
 	}
-	public double getAverageWaiting(){
-		return sumOfWaiting/serviceCompletedEvent.size();
+
+	/**
+	 * returns the average time of the MLMS simulation
+	 * @return
+	 */
+	public double getAverageTime() {
+		return averageTime/numOfCustomers;
 	}
-	public double getTotalWaitingTime(){
-		return sumOfWaiting;
+	
+	/**
+	 * returns the number of Customers to be served
+	 * @return
+	 */
+	public int numberOfCustomer() {
+		return numOfCustomers;
 	}
-	public long getsTotalTime() {
+	
+	/**
+	 * returns the total time taken to serve all the customers
+	 * @return
+	 */
+	public double getTotalTime() {
 		return totalTime;
 	}
-
+	
+	/**
+	 * returns true if all the customers have been served
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return arrivingCustomers.isEmpty();
+	}
 }

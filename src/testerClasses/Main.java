@@ -45,7 +45,7 @@ public class Main {
 						arrivalTime = scanner2.nextInt(); // the arrival time equals the first number in each line of the file
 						serviceTime =scanner2.nextInt();  // the service time equals the second number in each line of the file
 						// initialize a new customer with corresponding values
-						Customer customer = new Customer(0, arrivalTime, serviceTime); 
+						Customer customer = new Customer(arrivalTime, serviceTime); 
 						// add the customer to the list
 						list.add(customer); 
 					}

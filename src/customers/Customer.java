@@ -30,8 +30,8 @@ public class Customer {
 	 * @param arrivalTime
 	 * @param serviceTime
 	 */
-	public Customer(int ID, long arrivalTime, long serviceTime){
-		this.ID = ID;
+	public Customer(long arrivalTime, long serviceTime){
+//		this.ID = ID;
 		this.arrivalTime = arrivalTime;
 		this.serviceTime = serviceTime;
 		old = serviceTime;
