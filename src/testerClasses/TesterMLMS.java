@@ -1,3 +1,6 @@
+//Kelvin Garcia Muñiz || Luis Cintrón Zayas
+//802142644 || StudentNumberHere
+//CIIC4020 - 030
 package testerClasses;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +17,7 @@ public class TesterMLMS {
 
 	public static void main(String[] args) throws FileNotFoundException, CloneNotSupportedException {
 		String directory = "inputFiles";
-		String file = "data_0.txt";
+		String file = "data_1.txt";
 		Scanner scanner = new Scanner(new File(directory, file));
 		long arrivalTime, serviceTime;
 		int numOfServers = 1;
@@ -49,45 +52,6 @@ public class TesterMLMS {
 		}
 		return list2;
 	}
-//	public static LinkedQueue<Customer> copyOf (LinkedQueue<Customer> list) {
-//		LinkedQueue<Customer> copy = new LinkedQueue<>();
-//
-//		int i = 0;
-//		while(!(i==list.size())) {
-//			Customer c = list.dequeue();
-//			Customer copyC = new Customer();
-//
-//			copyC.setArrival(c.getArrival());
-//			copyC.setDeparture(c.getDeparture());
-//			copyC.setiD(c.getID());
-//			copyC.setServiceTime(c.getServiceTime());
-//
-//			list.enqueue(c);
-//			copy.enqueue(copyC);
-//			i++;
-//		}
-//
-//		return copy;
-//	}
-
-	//	public static float time(LinkedQueue<Customer> serviceCompletedQueue, int n ) {
-	//		   //Calculates time in system
-	//		
-	//  		float totalTime = 0;
-	//  		float arrVal = 0;
-	//  		float serVal = 0;
-	//  		int i =0;
-	//  		
-	//  		while(!serviceCompletedQueue.isEmpty()) {
-	//  			
-	//  			totalTime= (serviceCompletedQueue.dequeue().getWaitingTime() ) + totalTime;
-	//  		
-	//  			
-	//  		}
-	//  		totalTime= totalTime/n;
-	//  	
-	//  		return totalTime;
-	//	}
 
 	public static void initializePolicies(MLMS[]policy1 ) {
 		for(int i = 0; i< 3;i++) {

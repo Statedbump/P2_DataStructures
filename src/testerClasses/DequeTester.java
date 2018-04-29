@@ -1,8 +1,16 @@
+//Kelvin Garcia Muñiz || Luis Cintrón Zayas
+//802142644 || StudentNumberHere
+//CIIC4020 - 030
 package testerClasses;
 
 import implementations.LinkedDeque;
 import interfaces.Deque;
 
+/**
+ * Tester for the dequeue class
+ * @author Kelvin Garcia & Luis Cintrón
+ *
+ */
 public class DequeTester {
 	public static void main(String[] args) {
 		Deque<Integer> deq = new LinkedDeque<>();

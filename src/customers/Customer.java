@@ -1,4 +1,6 @@
-
+//Kelvin Garcia Muñiz || Luis Cintrón Zayas
+//802142644 || StudentNumberHere
+//CIIC4020 - 030
 package customers;
 /**
  * 
@@ -37,15 +39,15 @@ public class Customer {
 	}
 	
 	/**
-	 * 
-	 * @return boolean isServed - true if costumer has been served
+	 * returns true if costumer has been served
+	 * @return 
 	 */
 	public boolean isServed() {
 		return isServed;
 	}
 	
 	/**
-	 * 
+	 * sets the customer service status
 	 * @param isServed
 	 */
 	public void setServed(boolean isServed) {
@@ -77,7 +79,7 @@ public class Customer {
 	}
 
 	/**
-	 * 
+	 * sets the service time of the customer
 	 * @param serviceTime
 	 */
 	public void setServiceTime(long serviceTime) {
@@ -85,7 +87,7 @@ public class Customer {
 	}
 
 	/**
-	 * 
+	 * sets the time of the end of service
 	 * @param departureTime
 	 */
 	public void setDeparture(long departureTime) {
@@ -93,7 +95,7 @@ public class Customer {
 	}
 	
 	/**
-	 * 
+	 * returns the arrival time of the customer
 	 * @return
 	 */
 	public long getArrival() {
@@ -101,7 +103,7 @@ public class Customer {
 	}
 
 	/**
-	 * 
+	 * returns the service time of the customer
 	 * @return
 	 */
 	public long getServiceTime() {
@@ -109,19 +111,22 @@ public class Customer {
 	}
 	
 	/**
-	 * 
+	 * returns the departure time of the customer
 	 * @return
 	 */
 	public long getDeparture() {
 		return departureTime;
 	}
 	
+	/**
+	 * resets the service time to its original value
+	 */
 	public void resetServiceTime() {
 		serviceTime = old;
 	}
 	
 	/**
-	 * 
+	 * increases the value of m
 	 */
 	public void increaseM() {
 		m++; 
@@ -134,6 +139,11 @@ public class Customer {
 	public long getTimeWaiting(){
 		return waitingTime;
 	}
+	
+	/**
+	 * sets the waiting time of the customer
+	 * @param currentTime
+	 */
 	public void setTimeWaiting(long currentTime) {
 		this.waitingTime = currentTime - this.arrivalTime;
 		
