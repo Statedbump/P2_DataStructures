@@ -63,10 +63,21 @@ From terminal:
                 ls                           (lists all the files in the directory)
                 
       * For detailed information head to the in-code implementation *
-## Part 1:
-This part includes a working version of the four strategies to be implemented (P1, P2, P3, P4). 
-Output produces the results for a particular input in which the intersection of all the sets is the set containing the corresponding
-elements. (See results sample in "Part1 Sample Results Sheet.pdf")
+From IDE: Open the desired directory, followed by the desired file.
+## What the program does:
+This software allows the user to simulate various scenarios in which customers wait to be served under different waiting policies.
+The following, is a list of the simulated schemes:
+### 1) Single Line Multiple Servers (SLMS):
+This policy formats the customers into one waiting line and at least one service post (denoted as servers in-code). When a service
+is finished (if any) then, the first customer in the waiting line will proceed to be served. Should more than one server be available,
+the customer will proceed to the first service post available (the server with lowest index value)
+### 2) Multiple Lines Multiple Servers (MLMS):
+Customers formatted under this policy are placed into various waiting lines (one line per server). No transfers between lines occur 
+under this policy. If a customer arrives, it will be allocated in the first line with the fewest number of people waiting.
+### 3) Multiple Lines Multiple Servers and Balanced Line Lengths (MLMSBLL):
+This policy formats the customers into multiple waiting lines and at least one service post. However, under this scheme, customers are allowed to transfer between lines but only, if and only if, that transfer is beneficial for the customer. For example, suppose there are 2 lines. On line 1, the last customer is customer #5. If, for an instance, the length on line 2 is 4, then the customer would not benefit from this change, since moving it to the second line would place it in the same position (4+1=5). However, if the line 2 has only 3 customer, then the last customer at line 1 would benefit from the transfer since it would place it in position 4. In addition, should more than one server be available, the customer will be transfered to the line closes to the its right.
+### 4) Multiple Lines Multiple Servers and Balanced Line Lengths (MLMSBWT):
+Similar to the waiting policy MLMS, the customers are placed in various waiting lines where no transfers can occur. However, under this policy, customers are allocated, after their arrival, on the line with the lowest waiting time, that is, the fastest moving line. Should more than one line be available, the transfer will occur to the line with lower index
 ## Part 2:
 This part produces the empirical results for the execution times of each one of the four strategies in "part2Results/allResults.txt". (See running results sample graphs in "Part 2 Sample Results Sheets.pdf").
 ## Understanding the code:
