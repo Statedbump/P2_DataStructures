@@ -5,10 +5,10 @@ package waitingPolicies;
 
 import java.util.LinkedList;
 
-import customers.Customer;
-import customers.Monitor;
-import customers.Server;
 import implementations.LinkedQueue;
+import simulationObjects.Customer;
+import simulationObjects.Monitor;
+import simulationObjects.Server;
 
 //Multiple Lines Multiple Servers with Balanced Line Length
 public class MLMSBLL {

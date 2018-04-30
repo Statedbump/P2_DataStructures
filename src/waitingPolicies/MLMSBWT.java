@@ -5,9 +5,9 @@ package waitingPolicies;
 
 import java.util.LinkedList;
 
-import customers.Customer;
-import customers.Server;
 import implementations.LinkedQueue;
+import simulationObjects.Customer;
+import simulationObjects.Server;
 
 
 //Multiple Lines Multiple Servers

@@ -1,5 +1,5 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || StudentNumberHere
+//802142644 || 841141275
 //CIIC4020 - 030
 package main;
 import java.io.File;
@@ -9,7 +9,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
-import customers.Customer;
+
+import simulationObjects.Customer;
 import waitingPolicies.MLMS;
 import waitingPolicies.MLMSBLL;
 import waitingPolicies.MLMSBWT;

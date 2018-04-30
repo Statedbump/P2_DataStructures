@@ -1,5 +1,5 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || StudentNumberHere
+//802142644 || 841141275
 //CIIC4020 - 030
 package implementations;
 
@@ -66,14 +66,6 @@ public class LinkedDeque<E> implements Deque<E> {
 		 */
 		public E getElement() {
 			return element;
-		}
-
-		/**
-		 * sets the element in the node to the specified parameter
-		 * @param element
-		 */
-		public void setElement(E element) {
-			this.element = element;
 		}
 
 	}

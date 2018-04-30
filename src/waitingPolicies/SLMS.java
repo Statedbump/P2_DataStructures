@@ -1,14 +1,14 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || StudentNumberHere
+//802142644 || 841141275
 //CIIC4020 - 030
 package waitingPolicies;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import customers.Server;
-import customers.Customer;
-import customers.WaitingLine;
 import implementations.LinkedQueue;
+import simulationObjects.Customer;
+import simulationObjects.Server;
+import simulationObjects.WaitingLine;
 
 /**
  * 

@@ -1,5 +1,5 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || StudentNumberHere
+//802142644 || 841141275
 //CIIC4020 - 030
 package generators;
 import java.io.File;
@@ -22,6 +22,9 @@ public class FilesGeneratorMain {
 			if (args.length >= 2) 
 				m = Integer.parseInt(args[1]);  
 			generateFiles(n, m); // generate files with the specified parameters
+			System.out.println("----------------------------------------------------------------");
+			System.out.println("Files have been generated: "+n+" files with "+m+" customers each");
+			System.out.println("----------------------------------------------------------------");
 		} 
 		else 
 			System.out.println("Invalid number of parameters. Must be <= 2.");
