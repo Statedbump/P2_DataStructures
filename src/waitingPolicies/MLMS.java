@@ -4,9 +4,10 @@
 package waitingPolicies;
 
 import java.util.LinkedList;
-import customers.Customer;
-import customers.Server;
-import implementations.LinkedQueue;
+
+import implementations.SLLQueue;
+import simulationObjects.Customer;
+import simulationObjects.Server;
 
 //Multiple Lines Multiple Servers
 public class MLMS {
@@ -15,7 +16,7 @@ public class MLMS {
 	double totalTime = -1; // counts the current time of the simulation (begins in time 0)
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
-	private LinkedQueue<Customer> serviceCompleted;
+	private SLLQueue<Customer> serviceCompleted;
 	private Server[]servers; // array of servers
 	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
 
@@ -30,8 +31,11 @@ public class MLMS {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
+
 		this.arrivalOrder = new LinkedList<>();
-		this.serviceCompleted = new LinkedQueue<>();
+
+		serviceCompleted = new SLLQueue<>();
+
 		initializeServers(); // run the server init with the specified number	
 	}
 	
@@ -72,7 +76,7 @@ public class MLMS {
 					tr.setDeparture((long) totalTime);
 										
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.getOldServiceTime()-1)));
+					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.resetServiceTime()-1)));
 					// add the the costumer to the serviceCompletedqueue
 					this.serviceCompleted.enqueue(tr);
 					
@@ -181,11 +185,13 @@ public class MLMS {
 	 */
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
-		LinkedQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
+
+		SLLQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
 		while(!serviceCompletedCopy.isEmpty()) {
 			Customer c = serviceCompletedCopy.dequeue();
 
 			avgWaitingTime= avgWaitingTime+(c.getTimeWaiting());
+
 		}
 		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
 		return avgWaitingTime;
@@ -196,14 +202,14 @@ public class MLMS {
 	 * for calculation purposes
 	 */
 	
-	public LinkedQueue<Customer> copyOfServiceCompletedQueue(){
-		LinkedQueue<Customer> copy = new LinkedQueue<>();
+	public SLLQueue<Customer> copyOfServiceCompletedQueue(){
+		SLLQueue<Customer> copy = new SLLQueue<>();
 		
 		int j = 0;
 		while(!(j==this.serviceCompleted.size())) {
 			
 			Customer c = serviceCompleted.dequeue();
-			Customer cCopy = new Customer(c.getArrival(), c.getOldServiceTime());
+			Customer cCopy = new Customer(c.getArrival(), c.resetServiceTime());
 			
 			cCopy.setDeparture(c.getDeparture());
 			cCopy.setTimeWaiting(c.getTimeWaiting());

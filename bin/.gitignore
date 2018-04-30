@@ -1,3 +1,9 @@
 /customers/
 /main/
+<<<<<<< HEAD
+/generators/
+=======
 /waitingPolicies/
+>>>>>>> refs/remotes/origin/master
+/simulationObjects/
+/implementations/

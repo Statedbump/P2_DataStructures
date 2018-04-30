@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 1 100
 2 100
 3 3
@@ -13,3 +14,6 @@
 13 1
 14 1
 15 3
+=======
+CASAMOH
+>>>>>>> refs/remotes/origin/master

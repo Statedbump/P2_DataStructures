@@ -4,10 +4,11 @@
 package waitingPolicies;
 
 import java.util.LinkedList;
-import customers.Customer;
-import customers.Monitor;
-import customers.Server;
-import implementations.LinkedQueue;
+
+import implementations.SLLQueue;
+import simulationObjects.Customer;
+import simulationObjects.Monitor;
+import simulationObjects.Server;
 
 //Multiple Lines Multiple Servers with Balanced Line Length
 public class MLMSBLL {
@@ -16,8 +17,10 @@ public class MLMSBLL {
 	long totalTime = -1; // counts the current time of the simulation (begins in time 0)
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
-	private LinkedQueue<Customer> serviceCompleted;
+
+	private SLLQueue<Customer> serviceCompleted;
 	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
+
 	private Server[]servers; // array of servers
 
 	/**
@@ -31,8 +34,10 @@ public class MLMSBLL {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
-		this.serviceCompleted = new LinkedQueue<>();
+
+		this.serviceCompleted = new SLLQueue<>();
 		this.arrivalOrder = new LinkedList<>();
+
 		initializeServers(); // run the server init with the specified number	
 	}
 
@@ -67,7 +72,7 @@ public class MLMSBLL {
 					// set the time when the customer left
 					tr.setDeparture((long) totalTime);
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.getOldServiceTime()-1)));
+					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.resetServiceTime()-1)));
 					// add the the costumer to the serviceCompletedqueue
 					this.serviceCompleted.enqueue(tr);
 					// remove the customer from the arriving customers line
@@ -155,7 +160,8 @@ public class MLMSBLL {
 	 */
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
-		LinkedQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
+
+	SLLQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
 		while(!serviceCompletedCopy.isEmpty()) {
 			Customer c = serviceCompletedCopy.dequeue();
 
@@ -169,14 +175,14 @@ public class MLMSBLL {
 	 * returns a copy of the service completed queue for computational purposes
 	 * @return
 	 */
-	private LinkedQueue<Customer> copyOfServiceCompletedQueue(){
-		LinkedQueue<Customer> copy = new LinkedQueue<>();
+	private SLLQueue<Customer> copyOfServiceCompletedQueue(){
+		SLLQueue<Customer> copy = new SLLQueue<>();
 		
 		int j = 0;
 		while(!(j==this.serviceCompleted.size())) {
 			
 			Customer c = serviceCompleted.dequeue();
-			Customer cCopy = new Customer(c.getArrival(), c.getOldServiceTime());
+			Customer cCopy = new Customer(c.getArrival(), c.resetServiceTime());
 			
 			cCopy.setDeparture(c.getDeparture());
 			cCopy.setTimeWaiting(c.getTimeWaiting());
