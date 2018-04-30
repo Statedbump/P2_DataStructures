@@ -13,7 +13,6 @@ public class MLMS {
 
 	int numOfServers, numOfCustomers; 
 	double totalTime = -1; // counts the current time of the simulation (begins in time 0)
-	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
 	private LinkedQueue<Customer> serviceCompleted;
@@ -68,13 +67,11 @@ public class MLMS {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
 					
+					// set the time when the customer left
 					tr.setDeparture((long) totalTime);
-					System.out.println("Costumer  "+ tr.getArrival() + " "+ tr.getOldServiceTime() +"was serverd by server"+ " left at Time" + totalTime);
+					
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-					
-					
 					// add the the costumer to the serviceCompletedqueue
-					
 						this.serviceCompleted.enqueue(tr);
 					
 					// remove the customer from the arriving customers line
@@ -148,14 +145,7 @@ public class MLMS {
 		return copy;
 	}
 
-	/**
-	 * returns the average time of the MLMS simulation
-	 * @return
-	 */
-	public double getAverageTime() {
-		// average time waited = total time waited / number of customers
-		return totalWaitingTime/numOfCustomers;
-	}
+	
 	
 	/**
 	 * returns the number of Customers to be served
@@ -180,6 +170,11 @@ public class MLMS {
 	public boolean isEmpty() {
 		return arrivingCustomers.isEmpty();
 	}
+	
+	/**
+	 * returns the average time of the MLMS simulation
+	 * @return
+	 */
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
 		while(!serviceCompleted.isEmpty()) {

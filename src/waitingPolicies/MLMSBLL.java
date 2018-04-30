@@ -63,6 +63,8 @@ public class MLMSBLL {
 				if(c.attending().getServiceTime()==0) {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
+					// set the time when the customer left
+					tr.setDeparture((long) totalTime);
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
 					// add the the costumer to the serviceCompletedqueue
 					this.serviceCompleted.enqueue(tr);
@@ -148,9 +150,14 @@ public class MLMSBLL {
 	 * returns the average time of the MLMS simulation
 	 * @return
 	 */
-	public double getAverageTime() {
-		// average time waited = total time waited / number of customers
-		return totalWaitingTime/numOfCustomers;
+	public double getAvgWaitingTime() {
+		double avgWaitingTime = 0.0;
+		while(!serviceCompleted.isEmpty()) {
+			Customer c = serviceCompleted.dequeue();
+			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
+		}
+		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
+		return avgWaitingTime;
 	}
 
 	/**
