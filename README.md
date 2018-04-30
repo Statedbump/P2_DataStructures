@@ -9,37 +9,60 @@ similar IDE, these procedures may not be required.
 ### To Run Main Program:
 From terminal: java -classpath ./bin main/Main
     
-       This command will execute the Main.java class and output files according to the data gotten from the input files.
+       This command will execute the Main.java class and output results according to the data gotten from the input files. If 
+       the execution is successful, the names of the files generated will be displayed on the console.
        
        The execution of the program will be successful if the following conditions are satisfied:
        
-          1. There is a directory under the name specified by the program ("inputFiles" by default)
+          1. There is a directory under the name specified by the program ("inputFiles" by default).
          
-               - In addition, there must be a dataFiles.txt file containing the names of the files to be tested
+               - In addition, there must be a dataFiles.txt file containing the names of the files to be tested.
           
           2. There is a directory under the name specified by the program ("outputFiles" by default) containing the
-             output files of the program
-
+             output files of the program.
+             
+          3. The command is executed while in the correct directory path (.../p2_40354020_172).
+          
+       * For detailed information head to the in-code implementation *
 From IDE: Run Main.java from the main package
 ### To Run Files Generator:
-From terminal: java -classpath ./bin  p1MainClasses/Part2Main  n  m  isize  fsize  istep  rep
+From terminal: java -classpath ./bin generators/FilesGeneratorMain
 
-    Where:
-    
-       n = number of companies
+       This command will execute the FilesGeneratorMain.java class and output files according to specified parameters. 
+       If the execution is sucessful, a message should be displayed on the console, describing the amount of files and
+       and the amount of customers (integer values) in each file
        
-       m = number of crimes
-       
-       isize = initial size for experimentations
-       
-       fsize = final size for experimentations
-       
-       isetp = incremental size step (how much the size increases by trial)
-       
-       rep = number of repetitions per size
+        1. There is a directory under the name specified by the program ("inputFiles" by default).
+          
+        2. There is a directory under the name specified by the program ("outputFiles" by default).
+             
+        3. The command is executed while in the correct directory path (.../p2_40354020_172).
        
      * For detailed information head to the in-code implementation *
-From IDE: Run Part2Main.java, with the desired parameters, from the p1MainClasses package
+From IDE: Run filesGeneratorMain.java from the generators package
+### To View Files:
+From terminal: 
+    
+       Once located in the right directory path of the project (.../p2_40354020_172), head to the desired directory using 
+       the following commands: 
+            
+            To view the inputFiles:
+            
+                cd inputFiles               (by default)
+                
+                cat data_i.txt              (where i is the number of the file to view, by default)
+                
+                ls                          (lists all the files in the directory)
+                
+            To view the outputFiles:
+            
+                cd outputFiles               (by default)
+                
+                cat data_i_OUT.txt           (where i is the number of the file to view, by default)
+                
+                ls                           (lists all the files in the directory)
+                
+      * For detailed information head to the in-code implementation *
 ## Part 1:
 This part includes a working version of the four strategies to be implemented (P1, P2, P3, P4). 
 Output produces the results for a particular input in which the intersection of all the sets is the set containing the corresponding
