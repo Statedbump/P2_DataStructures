@@ -21,7 +21,7 @@ public class Customer {
 	 * Default Constructor
 	 */
 	public Customer() {
-		arrivalTime = serviceTime =departureTime  = 0;
+		arrivalTime = serviceTime =departureTime = waitingTime  = 0;
 		isServed = false;
 	}
 	/**
@@ -35,6 +35,7 @@ public class Customer {
 		this.arrivalTime = arrivalTime;
 		this.serviceTime = serviceTime;
 		this.line = 0;
+		waitingTime = 0;
 		old = serviceTime;
 		isServed = false;
 	}
@@ -154,7 +155,7 @@ public class Customer {
 	 * @param currentTime
 	 */
 	public void setTimeWaiting(long currentTime) {
-		this.waitingTime = currentTime - this.arrivalTime;
+		this.waitingTime = currentTime;
 		
 	}
 	public long getOldServiceTime(){
