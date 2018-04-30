@@ -44,16 +44,43 @@ public class MLMSBWT {
 	/**
 	 * initializes the servers with the specified number of servers
 	 */
-	public void initializeServers() {
+	private void initializeServers() {
 		for(int i=0;i<numOfServers;i++) {
 			servers[i]=new Server(); 
 		}
 	}
+	
+	/**
+	 * Begins the simulation
+	 */
+	public void performService() {
+		// while the service has not finished (there are customers to be served)
+		while(!isEmpty()) {
+			// increase the total time by 1 unit
+			totalTime++;
+			// for each customer c
+			for(Customer c: arrivingCustomers) {
+				// if the time of arrival is equal to the current time
+				if(c.getArrival()==totalTime) {
+					// add that customer to the waiting line
+					waitingLine.add(c);
+					arrivalOrder.add(c);
+				}
+			}
+			// add the customer to a server with least waiting time
+			addToServerAvailable();
+			// perform the service
+			Service();
+		}
+		totalTime++; // increases time by one last unit
+	}
+
+
 
 	/**
 	 * performs the service with a MLMS waiting policy
 	 */
-	public void Service() {
+	private void Service() {
 		//for each server c 
 		for(Server c: servers) {
 			// if there are servers in line
@@ -81,31 +108,6 @@ public class MLMSBWT {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Begins the simulation
-	 */
-	public void performService() {
-		// while the service has not finished (there are customers to be served)
-		while(!isEmpty()) {
-			// increase the total time by 1 unit
-			totalTime++;
-			// for each customer c
-			for(Customer c: arrivingCustomers) {
-				// if the time of arrival is equal to the current time
-				if(c.getArrival()==totalTime) {
-					// add that customer to the waiting line
-					waitingLine.add(c);
-					arrivalOrder.add(c);
-				}
-			}
-			// add the customer to a server with least waiting time
-			addToServerAvailable();
-			// perform the service
-			Service();
-		}
-		totalTime++; // increases time by one last unit
 	}
 
 	/**
@@ -170,7 +172,7 @@ public class MLMSBWT {
 	 * for calculation purposes
 	 */
 	
-	public SLLQueue<Customer> copyOfServiceCompletedQueue(){
+	private SLLQueue<Customer> copyOfServiceCompletedQueue(){
 		SLLQueue<Customer> copy = new SLLQueue<>();
 		
 		int j = 0;

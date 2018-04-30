@@ -44,45 +44,12 @@ public class MLMSBLL {
 	/**
 	 * initializes the servers with the specified number of servers
 	 */
-	public void initializeServers() {
+	private void initializeServers() {
 		for(int i=0;i<numOfServers;i++) {
 			servers[i]=new Server(); 
 		}
 	}
-
-	/**
-	 * performs the service with a MLMS waiting policy
-	 */
-	public void Service() {
-		//for each server c 
-		for(Server c: servers) {
-
-			if(c.isServing()) {
-				// if the servers has not finished with the customer
-				if(c.attending().getServiceTime()!=0) {
-					// remove one unit of time from the service time
-					c.attending().setServiceTime(c.attending().getServiceTime()-1);
-					// increase a unit of time from the departure
-					c.attending().setDeparture(c.attending().getDeparture()+1);
-				}
-				// if the server finished serving the customer
-				if(c.attending().getServiceTime()==0) {
-					//move on to the next customer (tr is customer already served)
-					Customer tr=c.nextCustomer();
-					// set the time when the customer left
-					tr.setDeparture((long) totalTime);
-					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.getOldServiceTime()-1)));
-					// add the the costumer to the serviceCompletedqueue
-					this.serviceCompleted.enqueue(tr);
-					// remove the customer from the arriving customers line
-					arrivingCustomers.remove(tr);
-
-				}
-			}
-		}
-	}
-
+	
 	/**
 	 * Begins the simulation
 	 */
@@ -112,10 +79,45 @@ public class MLMSBLL {
 		totalTime++;
 	}
 
+
+
 	/**
+	 * performs the service with a MLMS waiting policy
+	 */
+	private void Service() {
+		//for each server c 
+		for(Server c: servers) {
+
+			if(c.isServing()) {
+				// if the servers has not finished with the customer
+				if(c.attending().getServiceTime()!=0) {
+					// remove one unit of time from the service time
+					c.attending().setServiceTime(c.attending().getServiceTime()-1);
+					// increase a unit of time from the departure
+					c.attending().setDeparture(c.attending().getDeparture()+1);
+				}
+				// if the server finished serving the customer
+				if(c.attending().getServiceTime()==0) {
+					//move on to the next customer (tr is customer already served)
+					Customer tr=c.nextCustomer();
+					// set the time when the customer left
+					tr.setDeparture((long) totalTime);
+					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
+					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.getOldServiceTime()-1)));
+					// add the the costumer to the serviceCompletedqueue
+					this.serviceCompleted.enqueue(tr);
+					// remove the customer from the arriving customers line
+					arrivingCustomers.remove(tr);
+
+				}
+			}
+		}
+	}
+
+		/**
 	 * Adds the customer to an available server
 	 */
-	public void addToServerAvailable() {
+	private void addToServerAvailable() {
 		int index=0;
 
 		for(int i=1;i<servers.length;i++) {

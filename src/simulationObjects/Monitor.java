@@ -21,15 +21,12 @@ public class Monitor {
 		this.servers = servers;
 	}
 	
-	/**
-	 * Returns the values of the smallest and largest lines
-	 * @return
-	 * Return an int array containing the smallest and largest lines among the servers
-	 * where the value at 0 is the line with the greatest size and the value 1 is the 
-	 * line with the smallest size
-	 */
-	
-	
+
+/**
+ * This inner method is used to find the index of the line 
+ * with the largest amount of customers waiting	
+ * @return index of largest Line
+ */
 	private int indexOfLargestLine() {
 		Server s = servers[0];
 		int index = 0;
@@ -41,7 +38,12 @@ public class Monitor {
 		}
 		return index;
 	}
-	
+
+/**
+ * This inner method is used to find the index
+ * of the smallest line to right of the largest line
+ * @return
+ */
 	private int indexOfSmallestLine() {
 		int n= this.indexOfLargestLine();
 		Server s = servers[n]; 
@@ -64,9 +66,8 @@ public class Monitor {
 	 * then the transfer will not happen
 	 */
 	public void transferMLMSBLL() {
-		// create a parameters variable containing the smallest an greatest line
 		
-		// index of server with the greatets line 
+		// index of server with the greatest line 
 		int indexOfLargest = this.indexOfLargestLine();
 		//the smallest line 
 		int indexOfSmallest = this.indexOfSmallestLine();
@@ -74,7 +75,9 @@ public class Monitor {
 		Server sM = servers[indexOfSmallest];
 		
 		// if the size of the greatest line is greater than or equal than the size of the
-		// smallest line + 1 and the length of the greatest line is greater than 1 then:
+		// smallest line + 1 and the length of the greatest line is greater than 1 then
+		// no transfer can occur
+		
 		if((sL.lineLength() - sM.lineLength()) >1 && sL.lineLength()>=1){
 			// add the last customer of the greatest line to the smallest line
 			if(!sM.isServing()) {

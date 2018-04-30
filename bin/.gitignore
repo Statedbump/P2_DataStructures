@@ -1,7 +1,2 @@
-/main/
-/waitingPolicies/
-/customers/
-/implementations/
 /simulationObjects/
-/generators/
-/interfaces/
+/waitingPolicies/
