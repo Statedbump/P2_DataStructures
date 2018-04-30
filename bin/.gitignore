@@ -1,11 +1,2 @@
-/waitingPolicies/
-<<<<<<< HEAD
-/testerClasses/
-=======
-/implementations/
-/testerClasses/
-/generators/
->>>>>>> refs/remotes/origin/master
 /customers/
-/interfaces/
-/main/
+/waitingPolicies/
