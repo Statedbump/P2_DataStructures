@@ -5,6 +5,7 @@ package waitingPolicies;
 
 import java.util.LinkedList;
 import customers.Customer;
+import customers.Monitor;
 import customers.Server;
 
 //Multiple Lines Multiple Servers
@@ -54,7 +55,6 @@ public class MLMSBLL {
 					c.attending().setServiceTime(c.attending().getServiceTime()-1);
 					// increase a unit of time from the departure
 					c.attending().setDeparture(c.attending().getDeparture()+1);
-//					c.setWaitingCustTime(c.attending().getServiceTime()+1);
 				}
 				// if the server finished serving the customer
 				if(c.attending().getServiceTime()==0) {
@@ -68,7 +68,6 @@ public class MLMSBLL {
 					arrivingCustomers.remove(tr);
 				}
 			}
-		
 		}
 	}
 	
@@ -76,6 +75,7 @@ public class MLMSBLL {
 	 * Begins the simulation
 	 */
 	public void performService() {
+		Monitor monitor = new Monitor(servers);
 		// while the service has not finished (there are customers to be served)
 		while(!isEmpty()) {
 			// increase the total time by 1 unit
@@ -89,30 +89,42 @@ public class MLMSBLL {
 				}
 			}
 			// add the customer to a server with fewer customers
-			initialAddToServerAvailable();
+			addToServerAvailable();
 			// perform the service
 			Service();
-		}
+			while(!monitor.isBalanced()&&monitor.allAreServing()) {
+				//Server with the lowes people in line
+				Server sl = servers[monitor.findServerLineWithLeastCustomers()];
+				//server with the most customers
+				Server sM = servers[monitor.findServerLineWithMostCustomer()];
+				// the he determines if it is posible to balance the lines
+				if(monitor.allAreServing() && sM.lineLength() == sl.lineLength()+1 ) {
+					//We determine if a trasfer is not posible if all servers a
+					break;
+				}else {
+					transfer(monitor.findServerLineWithLeastCustomers());
+				}
+				
+			}
+		}	
 		totalTime++;
 	}
-
 	/**
 	 * Adds the customer to an available server
 	 */
-	public void initialAddToServerAvailable() {
+	public void addToServerAvailable() {
 		int index=0;
+		
 		for(int i=1;i<servers.length;i++) {
 			// if the line served by the current server is smaller than the line of the first server
-			if(servers[i].getWaitingCustTime()<servers[0].getWaitingCustTime())
+			if(servers[i].lineLength()<servers[0].lineLength())
 				// the smallest line is the line of that server
 				index=i;
 		}
 		// if there are customers in line
 		if(!waitingLine.isEmpty()){
-			long custTime = waitingLine.getFirst().getServiceTime();
+			//add that customer to the server with fewest people in line
 			servers[index].add(waitingLine.removeFirst());
-			servers[index].setWaitingCustTime(custTime);
-			System.out.println(index+" "+servers[index].getWaitingCustTime());
 		}
 	}
 	/**
@@ -129,6 +141,23 @@ public class MLMSBLL {
 		}
 		// return the copy
 		return copy;
+	}
+	
+	public void transfer(int n) {
+		// n is the index of the server with the most amount of customers in his line
+		//This is is the server with the largest line
+		Customer cToTransf = servers[n].customerToTransfer();
+		Server s = servers[n];
+		for(int i = 1; i < servers.length;i++) {
+			if(s.lineLength() > servers[(n+1)%servers.length].lineLength()) {
+				s = servers[(n+1)%servers.length];
+			}
+		}
+		
+		s.add(cToTransf);
+		//Now we are going to transfer the last customer in this line to the line with the lowest amount of customers to the right
+		
+		
 	}
 
 	/**

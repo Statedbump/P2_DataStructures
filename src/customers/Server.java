@@ -2,7 +2,8 @@
 //802142644 || StudentNumberHere
 //CIIC4020 - 030
 package customers;
-import implementations.LinkedQueue;
+import implementations.LinkedDeque;
+
 
 /**
  * 
@@ -10,13 +11,13 @@ import implementations.LinkedQueue;
  * @author Kelvin Garcia & Luis Cintrón
  */
 public class Server {
-	private LinkedQueue<Customer> lineQueue;
+	private LinkedDeque<Customer> lineQueue;
 	long time;
 	/**
 	 * Server Constructor
 	 */
 	public Server(){
-		lineQueue = new LinkedQueue<Customer>();
+		lineQueue = new LinkedDeque<Customer>();
 	}
 
 	/**
@@ -24,7 +25,7 @@ public class Server {
 	 * @return
 	 */
 	public boolean isServing(){
-		return lineQueue.size()==1;
+		return lineQueue.size()>0;
 	}
 
 	/**
@@ -32,7 +33,7 @@ public class Server {
 	 * @param client
 	 */
 	public void add(Customer client){
-		lineQueue.enqueue(client);
+		lineQueue.addLast(client);
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class Server {
 	 * @return
 	 */
 	public Customer nextCustomer(){
-		return lineQueue.dequeue();
+		return lineQueue.removeFirst();
 	}
 
 	/**
@@ -73,6 +74,9 @@ public class Server {
 	 */
 	public Customer peekFirstInLine(){
 		return lineQueue.first();
+	}
+	public Customer customerToTransfer() {
+		return lineQueue.removeLast();
 	}
 
 	/**
