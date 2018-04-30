@@ -145,7 +145,7 @@ public class MLMSBWT {
 		double avgWaitingTime = 0.0;
 		while(!serviceCompleted.isEmpty()) {
 			Customer c = serviceCompleted.dequeue();
-			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
+			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.resetServiceTime()-1));
 		}
 		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
 		return avgWaitingTime;

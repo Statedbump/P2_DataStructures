@@ -122,7 +122,7 @@ public class Main {
 	}
 
 	/**
-	 * initializes the policy 
+	 * initializes the policy SLMS 
 	 * @param policy
 	 */
 	private static void initializePolicies(SLMS[]policy) {

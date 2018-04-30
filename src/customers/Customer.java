@@ -120,13 +120,6 @@ public class Customer {
 	}
 	
 	/**
-	 * resets the service time to its original value
-	 */
-	public void resetServiceTime() {
-		serviceTime = old;
-	}
-	
-	/**
 	 * increases the value of m
 	 */
 	public void increaseM() {
@@ -157,7 +150,11 @@ public class Customer {
 		this.waitingTime = currentTime - this.arrivalTime;
 		
 	}
-	public long getOldServiceTime(){
+	
+	/**
+	 * resets the service time to its original value
+	 */
+	public long resetServiceTime(){
 		return this.old;
 	}
 	
