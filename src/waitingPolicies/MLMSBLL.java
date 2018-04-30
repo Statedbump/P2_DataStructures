@@ -8,7 +8,7 @@ import customers.Customer;
 import customers.Monitor;
 import customers.Server;
 
-//Multiple Lines Multiple Servers
+//Multiple Lines Multiple Servers with Balanced Line Length
 public class MLMSBLL {
 
 	int numOfServers, numOfCustomers; 
@@ -31,7 +31,7 @@ public class MLMSBLL {
 		this.waitingLine=new LinkedList<>();
 		initializeServers(); // run the server init with the specified number	
 	}
-	
+
 	/**
 	 * initializes the servers with the specified number of servers
 	 */
@@ -40,7 +40,7 @@ public class MLMSBLL {
 			servers[i]=new Server(); 
 		}
 	}
-	
+
 	/**
 	 * performs the service with a MLMS waiting policy
 	 */
@@ -61,7 +61,7 @@ public class MLMSBLL {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
 					// set the waiting time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((int)totalTime-tr.getArrival());
+					tr.setTimeWaiting(totalTime-tr.getArrival());
 					// add the waiting time to the total Waiting time
 					totalWaitingTime=totalWaitingTime+tr.getTimeWaiting();
 					// remove the customer from the arriving customers line
@@ -70,12 +70,11 @@ public class MLMSBLL {
 			}
 		}
 	}
-	
+
 	/**
 	 * Begins the simulation
 	 */
 	public void performService() {
-		Monitor monitor = new Monitor(servers);
 		// while the service has not finished (there are customers to be served)
 		while(!isEmpty()) {
 			// increase the total time by 1 unit
@@ -90,31 +89,22 @@ public class MLMSBLL {
 			}
 			// add the customer to a server with fewer customers
 			addToServerAvailable();
+			// create a monitor instance
+			Monitor monitor = new Monitor(servers);
+			// transfer customers amongs the lines (if needed)
+			monitor.transferMLMSBLL();
 			// perform the service
 			Service();
-			while(!monitor.isBalanced()&&monitor.allAreServing()) {
-				//Server with the lowes people in line
-				Server sl = servers[monitor.findServerLineWithLeastCustomers()];
-				//server with the most customers
-				Server sM = servers[monitor.findServerLineWithMostCustomer()];
-				// the he determines if it is posible to balance the lines
-				if(monitor.allAreServing() && sM.lineLength() == sl.lineLength()+1 ) {
-					//We determine if a trasfer is not posible if all servers a
-					break;
-				}else {
-					transfer(monitor.findServerLineWithLeastCustomers());
-				}
-				
-			}
 		}	
 		totalTime++;
 	}
+	
 	/**
 	 * Adds the customer to an available server
 	 */
 	public void addToServerAvailable() {
 		int index=0;
-		
+
 		for(int i=1;i<servers.length;i++) {
 			// if the line served by the current server is smaller than the line of the first server
 			if(servers[i].lineLength()<servers[0].lineLength())
@@ -127,6 +117,7 @@ public class MLMSBLL {
 			servers[index].add(waitingLine.removeFirst());
 		}
 	}
+	
 	/**
 	 * Returns a copy of the arriving customers
 	 * @param arrivingCustomers
@@ -142,23 +133,6 @@ public class MLMSBLL {
 		// return the copy
 		return copy;
 	}
-	
-	public void transfer(int n) {
-		// n is the index of the server with the most amount of customers in his line
-		//This is is the server with the largest line
-		Customer cToTransf = servers[n].customerToTransfer();
-		Server s = servers[n];
-		for(int i = 1; i < servers.length;i++) {
-			if(s.lineLength() > servers[(n+1)%servers.length].lineLength()) {
-				s = servers[(n+1)%servers.length];
-			}
-		}
-		
-		s.add(cToTransf);
-		//Now we are going to transfer the last customer in this line to the line with the lowest amount of customers to the right
-		
-		
-	}
 
 	/**
 	 * returns the average time of the MLMS simulation
@@ -168,7 +142,7 @@ public class MLMSBLL {
 		// average time waited = total time waited / number of customers
 		return totalWaitingTime/numOfCustomers;
 	}
-	
+
 	/**
 	 * returns the number of Customers to be served
 	 * @return
@@ -176,7 +150,7 @@ public class MLMSBLL {
 	public int numberOfCustomer() {
 		return numOfCustomers;
 	}
-	
+
 	/**
 	 * returns the total time taken to serve all the customers
 	 * @return
@@ -184,7 +158,7 @@ public class MLMSBLL {
 	public double getTotalTime() {
 		return totalTime;
 	}
-	
+
 	/**
 	 * returns true if all the customers have been served
 	 * @return

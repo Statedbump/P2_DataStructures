@@ -1,77 +1,87 @@
+//Kelvin Garcia Muñiz || Luis Cintrón Zayas
+//802142644 || StudentNumberHere
+//CIIC4020 - 030
 package customers;
 
+/**
+ * Class to manage the transfer of customers between lines according
+ * to their specified policy
+ * @author Kelvin Garcia & Luis Cintrón
+ *
+ */
 public class Monitor {
 	
 	private Server[] servers;
 	
-	public Monitor( Server[] servers) {
+	/**
+	 * Constructor
+	 * @param servers
+	 */
+	public Monitor(Server[] servers) {
 		this.servers = servers;
 	}
 	
-	public  boolean isBalanced() {
-		Server s = servers[0];
-		for(int i = 1 ; i< servers.length; i++) {
-			if(s.lineLength() != servers[i].lineLength()) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public int findServerLineWithMostCustomer() {
-		int index = 0 ;
-		Server s = servers[0];
-		for(int i = 1; i < servers.length; i++) {
-			if(servers[i].lineLength() >= s.lineLength()) {
-				s = servers[i];
-				index = i;
-			}
-		}
-		return index;
-	}
-	
-	public  int numOfCostumersWaiting() {
-		int x = 0;
-		
-		for(int i =0; i < servers.length;i++) {
-			x = x + servers[i].lineLength();
+	/**
+	 * Returns the values of the smallest and largest lines
+	 * @return
+	 * Return an int array containing the smallest and largest lines among the servers
+	 * where the value at 0 is the line with the greatest size and the value 1 is the 
+	 * line with the smallest size
+	 */
+	public int[] checkLinesSize() {
+		// initialize an array of size 2 to contain the lines
+		int[] lines = new int[2];
+		// initialize an array containing the sizes of the lines of each server
+		int[] sizes = new int[servers.length];
+		for(int i=0;i<sizes.length;i++) {
+			// initialize the size of each line as an element of the array of sizes
+			sizes[i]=servers[i].lineLength();
 		}
 		
-		return x;
-		
-	}
-	public boolean allAreServing() {
-		for(int i = 0 ; i<servers.length;i++) {
-			if(!servers[i].isServing()) {
-				return false;
+		// set the max value to the first size in the array
+		int maxValue = sizes[0];
+		for (int i = 1; i < sizes.length; i++) {
+			// if the size at position i is greater than the max value
+			if (sizes[i] >= maxValue) {
+				// then the new max value is the size at position i
+				maxValue = i;
 			}
 		}
-		return true;
-	}
-	
-	public int countNumberofMaxCusLines() {
-		int n = this.findServerLineWithMostCustomer();
-		int x = 0;
-		for(int i = 1; i < servers.length ; i++) {
-			if(servers[n].lineLength() == servers[(n+1)%servers.length].lineLength()) {
-				x++;
-			}
-			
-		}
-		return x;
-	}
-	
-	public int findServerLineWithLeastCustomers() {
-		Server s = servers[0];
-		int index = 0;
-		for(int i =0; i<servers.length;i++) {
-			if(servers[i].lineLength()<s.lineLength()) {
-				s = servers[i];
-				index = i;
+		// the first value in the array of lines will be equal to the greatest size
+		lines[0]= maxValue;
+		// set the min value to the first size in the array
+		int minValue = sizes[0];
+		for (int i = 1; i < sizes.length; i++) {
+			// if the size at position i is smaller than the min value
+			if (sizes[i] <= minValue) {
+				// then the new min value is the size at position i
+				minValue = i;
 			}
 		}
-		return index;
+		// the second value in the array of lines will be equal to the smallest size
+		lines[1]=minValue;
+		// return an array with the smallest and greates value
+		return lines;
 	}
 	
-
+	/**
+	 * transfer the customers among lines, if needed, following an MLMS policy
+	 * The transfer occurs only when a customer benefits from it. For an instance,
+	 * if the moving the customer to a smaller line would put it in the same position
+	 * then the transfer will not happen
+	 */
+	public void transferMLMSBLL() {
+		// create a parameters variable containing the smallest an greatest line
+		int[] parameters=checkLinesSize();
+		// the greates line will be in position 0
+		int bigLine = parameters[0];
+		//the smallest line will be in position 1
+		int smallLine = parameters[1];
+		// if the size of the greatest line is greater than or equal than the size of the
+		// smallest line + 1 and the length of the greatest line is greater than 1 then:
+		if(bigLine>=(smallLine+1) && servers[bigLine].lineLength()>1){
+			// add the last customer of the greatest line to the smallest line
+			servers[smallLine].add(servers[bigLine].customerToTransfer());
+		}
+	}
 }
