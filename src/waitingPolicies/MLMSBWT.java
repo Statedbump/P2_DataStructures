@@ -6,16 +6,17 @@ package waitingPolicies;
 import java.util.LinkedList;
 import customers.Customer;
 import customers.Server;
+import implementations.LinkedQueue;
 
 //Multiple Lines Multiple Servers
 public class MLMSBWT {
 
 	int numOfServers, numOfCustomers; 
 	long totalTime = -1; // counts the current time of the simulation (begins in time 0)
-	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
 	private Server[]servers; // array of servers
+	private LinkedQueue<Customer> serviceCompleted;
 
 	/**
 	 * Constructor
@@ -28,6 +29,7 @@ public class MLMSBWT {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
+		serviceCompleted = new LinkedQueue<>();
 		initializeServers(); // run the server init with the specified number	
 	}
 
@@ -47,7 +49,7 @@ public class MLMSBWT {
 		//for each server c 
 		for(Server c: servers) {
 			// if there are servers in line
-			if(c.lineLength()!=0) {
+			if(c.isServing()) {
 				// if the servers has not finished with the customer
 				if(c.attending().getServiceTime()!=0) {
 					// remove one unit of time from the service time
@@ -60,9 +62,11 @@ public class MLMSBWT {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
 					// set the waiting time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((int)totalTime-tr.getArrival());
-					// add the waiting time to the total Waiting time
-					totalWaitingTime=totalWaitingTime+tr.getTimeWaiting();
+					tr.setDeparture((long) totalTime);
+
+					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
+					// add the the costumer to the serviceCompletedqueue
+					this.serviceCompleted.enqueue(tr);
 					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
 				}
@@ -108,11 +112,15 @@ public class MLMSBWT {
 		// if there are customers in line
 		if(!waitingLine.isEmpty()){
 			long custTime = waitingLine.getFirst().getServiceTime(); //service time of the customer
+			if(!servers[index].isServing()) {
 			servers[index].add(waitingLine.removeFirst()); //add the customer to the server
+			}else {
+				servers[index].getLineOfServer().add(waitingLine.removeFirst());
+			}
 			servers[index].setWaitingCustTime(custTime); // add the service time of that customer to the service line
 		}
 	}
-	
+
 	/**
 	 * Returns a copy of the arriving customers
 	 * @param arrivingCustomers
@@ -133,9 +141,14 @@ public class MLMSBWT {
 	 * returns the average time of the MLMS simulation
 	 * @return
 	 */
-	public double getAverageTime() {
-		// average time waited = total time waited / number of customers
-		return (totalWaitingTime+1)/numOfCustomers;
+	public double getAvgWaitingTime() {
+		double avgWaitingTime = 0.0;
+		while(!serviceCompleted.isEmpty()) {
+			Customer c = serviceCompleted.dequeue();
+			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
+		}
+		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
+		return avgWaitingTime;
 	}
 
 	/**
