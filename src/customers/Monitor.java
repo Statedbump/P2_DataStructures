@@ -64,6 +64,33 @@ public class Monitor {
 		return lines;
 	}
 	
+	public int indexOfLargestLine() {
+		Server s = servers[0];
+		int index = 0;
+		for(int i = 0 ; i < servers.length; i++) {
+			if(servers[i].lineLength() >= s.lineLength()) {
+				s = servers[i];
+				index = i;
+			}
+		}
+		return index;
+	}
+	
+	public int indexOfSmallestLine() {
+		int n= this.indexOfLargestLine();
+		Server s = servers[n]; 
+		int indexOfSmallest = 0;
+		for(int i =1 ; i < servers.length; i++) {
+			if( s.lineLength() > servers[(i+n)%servers.length].lineLength() ) {
+				s =  servers[(i+n)%servers.length];
+				indexOfSmallest =  (i+n)%servers.length;
+			}
+		}
+		return indexOfSmallest;
+	}
+	
+	
+	
 	/**
 	 * transfer the customers among lines, if needed, following an MLMS policy
 	 * The transfer occurs only when a customer benefits from it. For an instance,
@@ -72,16 +99,24 @@ public class Monitor {
 	 */
 	public void transferMLMSBLL() {
 		// create a parameters variable containing the smallest an greatest line
-		int[] parameters=checkLinesSize();
-		// the greatets line will be in position 0
-		int bigLine = parameters[0];
-		//the smallest line will be in position 1
-		int smallLine = parameters[1];
+		
+		// index of server with the greatets line 
+		int indexOfLargest = this.indexOfLargestLine();
+		//the smallest line 
+		int indexOfSmallest = this.indexOfSmallestLine();
+		Server sL = servers[indexOfLargest];
+		Server sM = servers[indexOfSmallest];
+		
 		// if the size of the greatest line is greater than or equal than the size of the
 		// smallest line + 1 and the length of the greatest line is greater than 1 then:
-		if(bigLine>=(smallLine+1) && servers[bigLine].getLineOfServer().lineLength()>0){
+		if((sL.lineLength() - sM.lineLength()) >1 && sL.lineLength()>=1){
 			// add the last customer of the greatest line to the smallest line
-			servers[smallLine].add(servers[bigLine].customerToTransfer());
+			if(!sM.isServing()) {
+				sM.add(sL.customerToTransfer());
+			}else {
+				sM.getLineOfServer().add(sL.customerToTransfer());
+			}
+			
 		}
 	}
 }
