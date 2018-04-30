@@ -10,7 +10,7 @@ import interfaces.Queue;
  *
  * @param <E>
  */
-public class LinkedQueue<E> implements Queue<E> {
+public class SLLQueue<E> implements Queue<E> {
 	// inner class for nodes in singly linked lists
 	private static class Node<E> {
 		private E element; 
@@ -56,7 +56,7 @@ public class LinkedQueue<E> implements Queue<E> {
 	/**
 	 * Constructor
 	 */
-	public LinkedQueue() {           // initializes instance as empty queue
+	public SLLQueue() {           // initializes instance as empty queue
 		first = last = null; 
 		size = 0; 
 	}
@@ -145,9 +145,9 @@ public class LinkedQueue<E> implements Queue<E> {
 	 * Creates a clone of the queue
 	 * @throws CloneNotSupportedException
 	 */
-	public LinkedQueue<E> clone() throws CloneNotSupportedException {			
+	public SLLQueue<E> clone() throws CloneNotSupportedException {			
 
-		LinkedQueue<E> copy = new LinkedQueue<E>();
+		SLLQueue<E> copy = new SLLQueue<E>();
 		Node<E> current = first;
 		E etr;
 

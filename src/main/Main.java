@@ -9,7 +9,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
-import customers.Customer;
+
+import simulationObjects.Customer;
 import waitingPolicies.MLMS;
 import waitingPolicies.MLMSBLL;
 import waitingPolicies.MLMSBWT;

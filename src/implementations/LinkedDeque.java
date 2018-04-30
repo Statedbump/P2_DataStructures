@@ -68,14 +68,6 @@ public class LinkedDeque<E> implements Deque<E> {
 			return element;
 		}
 
-		/**
-		 * sets the element in the node to the specified parameter
-		 * @param element
-		 */
-		public void setElement(E element) {
-			this.element = element;
-		}
-
 	}
 	private Node<E> header,trailer;
 	private int size;

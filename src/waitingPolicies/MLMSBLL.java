@@ -4,10 +4,11 @@
 package waitingPolicies;
 
 import java.util.LinkedList;
-import customers.Customer;
-import customers.Monitor;
-import customers.Server;
-import implementations.LinkedQueue;
+
+import implementations.SLLQueue;
+import simulationObjects.Customer;
+import simulationObjects.Monitor;
+import simulationObjects.Server;
 
 //Multiple Lines Multiple Servers with Balanced Line Length
 public class MLMSBLL {
@@ -17,7 +18,7 @@ public class MLMSBLL {
 	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
-	private LinkedQueue<Customer> serviceCompleted;
+	private SLLQueue<Customer> serviceCompleted;
 	private Server[]servers; // array of servers
 
 	/**
@@ -31,7 +32,7 @@ public class MLMSBLL {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
-		serviceCompleted = new LinkedQueue<>();
+		serviceCompleted = new SLLQueue<>();
 		initializeServers(); // run the server init with the specified number	
 	}
 
