@@ -47,11 +47,7 @@ public class MLMS {
 	 * performs the service with a MLMS waiting policy
 	 */
 	public void Service() {
-		
-		
-		
-		
-		
+
 		//for each server c 
 		for(Server c: servers) {
 			// if there are servers in line

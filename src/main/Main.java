@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import customers.Customer;
 import waitingPolicies.MLMS;
+import waitingPolicies.MLMSBLL;
 import waitingPolicies.MLMSBWT;
 import waitingPolicies.SLMS;
 
@@ -75,10 +76,20 @@ public class Main {
 					numOfServers =1; // resets the number of servers
 					for(int i =0; i<numOfTests ; i++) { //runs three tests
 						list2 = copyList(list); //makes a copy of the list
-						MLMSBWT policy3= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
+						MLMSBLL policy3= new MLMSBLL(list2,numOfServers); // creates the policy with its respective parameters
 						policy3.performService(); // performs service
-						out.println("MLMSBWT " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
+						out.println("MLMSBLL " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
 						formatter.format(policy3.getAverageTime())); // prints the output on its respective file
+						numOfServers+=2; //increase the number of servers by 2
+					}
+					out.println("-----------------------------------"); 
+					numOfServers =1; // resets the number of servers
+					for(int i =0; i<numOfTests ; i++) { //runs three tests
+						list2 = copyList(list); //makes a copy of the list
+						MLMSBWT policy4= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
+						policy4.performService(); // performs service
+						out.println("MLMSBWT " + numOfServers+ ": " + policy4.getTotalTime()+ "\t\t" + 
+						formatter.format(policy4.getAverageTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------");
