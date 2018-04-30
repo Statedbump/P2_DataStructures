@@ -5,7 +5,7 @@ package waitingPolicies;
 
 import java.util.LinkedList;
 
-import implementations.LinkedQueue;
+import implementations.SLLQueue;
 import simulationObjects.Customer;
 import simulationObjects.Server;
 
@@ -19,7 +19,7 @@ public class MLMSBWT {
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
 	private Server[]servers; // array of servers
 
-	private LinkedQueue<Customer> serviceCompleted;
+	private SLLQueue<Customer> serviceCompleted;
 	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
 
 
@@ -35,7 +35,7 @@ public class MLMSBWT {
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
 
-		serviceCompleted = new LinkedQueue<>();
+		serviceCompleted = new SLLQueue<>();
 		this.arrivalOrder = new LinkedList<>();
 
 		initializeServers(); // run the server init with the specified number	
@@ -154,7 +154,7 @@ public class MLMSBWT {
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
 
-		LinkedQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
+		SLLQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
 		while(!serviceCompletedCopy.isEmpty()) {
 			Customer c = serviceCompletedCopy.dequeue();
 
@@ -170,8 +170,8 @@ public class MLMSBWT {
 	 * for calculation purposes
 	 */
 	
-	public LinkedQueue<Customer> copyOfServiceCompletedQueue(){
-		LinkedQueue<Customer> copy = new LinkedQueue<>();
+	public SLLQueue<Customer> copyOfServiceCompletedQueue(){
+		SLLQueue<Customer> copy = new SLLQueue<>();
 		
 		int j = 0;
 		while(!(j==this.serviceCompleted.size())) {

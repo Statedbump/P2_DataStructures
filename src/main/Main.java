@@ -45,55 +45,61 @@ public class Main {
 				try { // begins try/catch 2
 					scanner2 = new Scanner(new File(directory, file)); //initialize scanner 2
 					initializePolicies(policy1); //intialize SLMS policy
-					while(scanner2.hasNextInt()){ //while there are integers in the file
-						arrivalTime = scanner2.nextInt(); // the arrival time equals the first number in each line of the file
-						serviceTime =scanner2.nextInt();  // the service time equals the second number in each line of the file
-						// initialize a new customer with corresponding values
-						Customer customer = new Customer(arrivalTime, serviceTime); 
-						// add the customer to the list
-						list.add(customer); 
+					if(scanner2.hasNextInt()){ // if the files contains numbers only
+						while(scanner2.hasNextInt()){ //while there are integers in the file
+							arrivalTime = scanner2.nextInt(); // the arrival time equals the first number in each line of the file
+							serviceTime =scanner2.nextInt();  // the service time equals the second number in each line of the file
+							// initialize a new customer with corresponding values
+							Customer customer = new Customer(arrivalTime, serviceTime); 
+							// add the customer to the list
+							list.add(customer); 
+						}
+						scanner2.close(); //close scanner2
+						out.println("-----------------------------------"); 
+						numOfServers = 1;
+						for(int i =0; i<numOfTests ; i++) { //runs three tests
+							list2 = copyList(list); //makes a copy of the list
+							policy1[i].performService(numOfServers, list2); // performs service with the respective num of servers
+							out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t\t\t" + 
+									formatter.format(policy1[i].getAverageWaiting())+"\t"+ 0.0); // prints the output on its respective file
+							//SLMS will always have m = to 0 since there are no other lines and no transfers can occur
+							numOfServers+=2; //increase the number of servers by 2
+						}
+						out.println("-----------------------------------"); 
+						numOfServers =1; // resets the number of servers
+						for(int i =0; i<numOfTests ; i++) { //runs three tests
+							list2 = copyList(list); //makes a copy of the list
+							MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
+							policy2.performService(); // performs service
+							out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t\t" + 
+									formatter.format(policy2.getAvgWaitingTime())+"\t"+policy2.calculateM()); // prints the output on its respective file
+							numOfServers+=2; //increase the number of servers by 2
+						}
+						out.println("-----------------------------------"); 
+						numOfServers =1; // resets the number of servers
+						for(int i =0; i<numOfTests ; i++) { //runs three tests
+							list2 = copyList(list); //makes a copy of the list
+							MLMSBLL policy3= new MLMSBLL(list2,numOfServers); // creates the policy with its respective parameters
+							policy3.performService(); // performs service
+							out.println("MLMSBLL " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
+									formatter.format(policy3.getAvgWaitingTime())+"\t"+policy3.calculateM()); // prints the output on its respective file
+							numOfServers+=2; //increase the number of servers by 2
+						}
+						out.println("-----------------------------------"); 
+						numOfServers =1; // resets the number of servers
+						for(int i =0; i<numOfTests ; i++) { //runs three tests
+							list2 = copyList(list); //makes a copy of the list
+							MLMSBWT policy4= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
+							policy4.performService(); // performs service
+							out.println("MLMSBWT " + numOfServers+ ": " + policy4.getTotalTime()+ "\t\t" + 
+									formatter.format(policy4.getAvgWaitingTime())+"\t"+policy4.calculateM()); // prints the output on its respective file
+							numOfServers+=2; //increase the number of servers by 2
+						}
+						out.println("-----------------------------------");
+					} // if the file is invalid
+					else{
+						out.println("Input file does not meet the expected format or it is empty.");
 					}
-					scanner2.close(); //close scanner2
-					out.println("-----------------------------------"); 
-					numOfServers = 1;
-					for(int i =0; i<numOfTests ; i++) { //runs three tests
-						list2 = copyList(list); //makes a copy of the list
-						policy1[i].performService(numOfServers, list2); // performs service with the respective num of servers
-						out.println("SLMS " + numOfServers+ ": " + policy1[i].getsTotalTime()+ "\t\t\t" + 
-								formatter.format(policy1[i].getAverageWaiting())); // prints the output on its respective file
-						numOfServers+=2; //increase the number of servers by 2
-					}
-					out.println("-----------------------------------"); 
-					numOfServers =1; // resets the number of servers
-					for(int i =0; i<numOfTests ; i++) { //runs three tests
-						list2 = copyList(list); //makes a copy of the list
-						MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
-						policy2.performService(); // performs service
-						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t\t" + 
-						formatter.format(policy2.getAvgWaitingTime())); // prints the output on its respective file
-						numOfServers+=2; //increase the number of servers by 2
-					}
-					out.println("-----------------------------------"); 
-					numOfServers =1; // resets the number of servers
-					for(int i =0; i<numOfTests ; i++) { //runs three tests
-						list2 = copyList(list); //makes a copy of the list
-						MLMSBLL policy3= new MLMSBLL(list2,numOfServers); // creates the policy with its respective parameters
-						policy3.performService(); // performs service
-						out.println("MLMSBLL " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
-						formatter.format(policy3.getAvgWaitingTime())); // prints the output on its respective file
-						numOfServers+=2; //increase the number of servers by 2
-					}
-					out.println("-----------------------------------"); 
-					numOfServers =1; // resets the number of servers
-					for(int i =0; i<numOfTests ; i++) { //runs three tests
-						list2 = copyList(list); //makes a copy of the list
-						MLMSBWT policy4= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
-						policy4.performService(); // performs service
-						out.println("MLMSBWT " + numOfServers+ ": " + policy4.getTotalTime()+ "\t\t" + 
-						formatter.format(policy4.getAvgWaitingTime())); // prints the output on its respective file
-						numOfServers+=2; //increase the number of servers by 2
-					}
-					out.println("-----------------------------------");
 				} catch (FileNotFoundException e) { // if the input file was not found
 					out.println("Input file not found.");
 				}//end of try/catch 2
@@ -105,7 +111,7 @@ public class Main {
 			System.out.println("The directory path specified was not found"); //if the output directory was not found
 		}
 	}
-	
+
 	/**
 	 * returns a copy of the specified list
 	 * @param list

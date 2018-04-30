@@ -5,7 +5,7 @@ package waitingPolicies;
 
 import java.util.LinkedList;
 
-import implementations.LinkedQueue;
+import implementations.SLLQueue;
 import simulationObjects.Customer;
 import simulationObjects.Monitor;
 import simulationObjects.Server;
@@ -18,7 +18,7 @@ public class MLMSBLL {
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
 
-	private LinkedQueue<Customer> serviceCompleted;
+	private SLLQueue<Customer> serviceCompleted;
 	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
 
 	private Server[]servers; // array of servers
@@ -35,7 +35,7 @@ public class MLMSBLL {
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
 
-		this.serviceCompleted = new LinkedQueue<>();
+		this.serviceCompleted = new SLLQueue<>();
 		this.arrivalOrder = new LinkedList<>();
 
 		initializeServers(); // run the server init with the specified number	
@@ -161,7 +161,7 @@ public class MLMSBLL {
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
 
-		LinkedQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
+		SLLQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
 		while(!serviceCompletedCopy.isEmpty()) {
 			Customer c = serviceCompletedCopy.dequeue();
 
@@ -175,8 +175,8 @@ public class MLMSBLL {
 	 * returns a copy of the service completed queue for computational purposes
 	 * @return
 	 */
-	private LinkedQueue<Customer> copyOfServiceCompletedQueue(){
-		LinkedQueue<Customer> copy = new LinkedQueue<>();
+	private SLLQueue<Customer> copyOfServiceCompletedQueue(){
+		SLLQueue<Customer> copy = new SLLQueue<>();
 		
 		int j = 0;
 		while(!(j==this.serviceCompleted.size())) {
@@ -219,6 +219,12 @@ public class MLMSBLL {
 	public boolean isEmpty() {
 		return arrivingCustomers.isEmpty();
 	}
+	
+	/**
+	 * This method checks to see if there was a customer with greater
+	 * arrival time that finished before one with less arrival time	
+	 * @return
+	 */
 	public double calculateM() {
 		int count = 0;
 		double m = 0.00;

@@ -3,7 +3,7 @@
 //CIIC4020 - 030
 package simulationObjects;
 
-import implementations.LinkedQueue;
+import implementations.SLLQueue;
 
 
 /**
@@ -12,14 +12,14 @@ import implementations.LinkedQueue;
  * @author Kelvin Garcia & Luis Cintrón
  */
 public class Server {
-	private LinkedQueue<Customer> serverQueu;
+	private SLLQueue<Customer> serverQueu;
 	private WaitingLine line;
 	long time;
 	/**
 	 * Server Constructor
 	 */
 	public Server(){
-		serverQueu = new LinkedQueue<Customer>();
+		serverQueu = new SLLQueue<Customer>();
 		this.line = new WaitingLine();
 	}
 

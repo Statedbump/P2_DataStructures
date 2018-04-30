@@ -5,7 +5,7 @@ package waitingPolicies;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import implementations.LinkedQueue;
+import implementations.SLLQueue;
 import simulationObjects.Customer;
 import simulationObjects.Server;
 import simulationObjects.WaitingLine;
@@ -18,12 +18,12 @@ import simulationObjects.WaitingLine;
 public class SLMS {
 
 	private WaitingLine line; //contains all the customers waiting to be served after arrival
-	private LinkedQueue<Customer>serviceCompletedEvent; // contains all the customers that have been served
+	private SLLQueue<Customer>serviceCompletedEvent; // contains all the customers that have been served
 	private long totalTime; //the total time taken to serve all customers
 	private double sumOfWaiting; //the sum of the times waited by each customer
 	int numberOfCustomers; // the number of customers to be served
 	public SLMS() {
-		serviceCompletedEvent = new LinkedQueue<>();
+		serviceCompletedEvent = new SLLQueue<>();
 	}
 
 	/**
