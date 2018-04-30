@@ -1,9 +1,10 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || StudentNumberHere
+//802142644 || 841141275
 //CIIC4020 - 030
 package waitingPolicies;
 
 import java.util.LinkedList;
+
 import customers.Customer;
 import customers.Server;
 import implementations.LinkedQueue;
@@ -17,6 +18,7 @@ public class MLMS {
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
 	private LinkedQueue<Customer> serviceCompleted;
 	private Server[]servers; // array of servers
+	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
 
 	/**
 	 * Constructor
@@ -29,7 +31,11 @@ public class MLMS {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
+
+		this.arrivalOrder = new LinkedList<>();
+
 		serviceCompleted = new LinkedQueue<>();
+
 		initializeServers(); // run the server init with the specified number	
 	}
 	
@@ -65,14 +71,14 @@ public class MLMS {
 				if(c.attending().getServiceTime()==0) {
 					
 					//move on to the next customer (tr is customer already served)
-					Customer tr=c.nextCustomer();
-					
+					Customer tr=c.nextCustomer();			
 					// set the time when the customer left
 					tr.setDeparture((long) totalTime);
-					
+										
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
+					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.getOldServiceTime()-1)));
 					// add the the costumer to the serviceCompletedqueue
-						this.serviceCompleted.enqueue(tr);
+					this.serviceCompleted.enqueue(tr);
 					
 					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
@@ -95,6 +101,7 @@ public class MLMS {
 				if(c.getArrival()==totalTime) {
 					// add that customer to the waiting line
 					waitingLine.add(c);
+					arrivalOrder.add(c);
 				}
 			}
 			// add the customer to a server with fewer customers
@@ -103,12 +110,13 @@ public class MLMS {
 			Service();
 		}	
 		totalTime++;
+		//setWaitingTimeOfallCustomers();
 	}
 
 	/**
 	 * Adds the customer to an available server
 	 */
-	public void addToServerAvailable() {
+	private void addToServerAvailable() {
 		int index=0;
 		
 		for(int i=1;i<servers.length;i++) {
@@ -177,11 +185,69 @@ public class MLMS {
 	 */
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
-		while(!serviceCompleted.isEmpty()) {
-			Customer c = serviceCompleted.dequeue();
-			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
+
+		LinkedQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
+		while(!serviceCompletedCopy.isEmpty()) {
+			Customer c = serviceCompletedCopy.dequeue();
+
+			avgWaitingTime= avgWaitingTime+(c.getTimeWaiting());
+
 		}
 		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
 		return avgWaitingTime;
 	}
+	
+	/*
+	 * returns a copy of the Service Completed Queue
+	 * for calculation purposes
+	 */
+	
+	public LinkedQueue<Customer> copyOfServiceCompletedQueue(){
+		LinkedQueue<Customer> copy = new LinkedQueue<>();
+		
+		int j = 0;
+		while(!(j==this.serviceCompleted.size())) {
+			
+			Customer c = serviceCompleted.dequeue();
+			Customer cCopy = new Customer(c.getArrival(), c.getOldServiceTime());
+			
+			cCopy.setDeparture(c.getDeparture());
+			cCopy.setTimeWaiting(c.getTimeWaiting());
+			serviceCompleted.enqueue(c);
+			copy.enqueue(cCopy);
+			j++;
+			
+		}
+		
+		return copy;
+
+	}
+	
+	/*
+	 * This method checks to see if there was a customer with greater
+	 * arrival time that finished before one with less arrival time	 
+	 * 
+	*/
+	public double calculateM() {
+		int count = 0;
+		double m = 0.00;
+		for(Customer c: arrivalOrder) {
+			
+			for(int i = 0 ; i < serviceCompleted.size();i++) {
+				Customer c2 =  serviceCompleted.dequeue();
+				if(c2.getArrival()>c.getArrival() && c2.getTimeWaiting()<c.getTimeWaiting()) {
+					count ++;
+				}
+				serviceCompleted.enqueue(c2);
+			}
+			m = count/this.numOfCustomers;
+			
+		}
+		return m;
+		
+		
+	}
+
+	
+	
 }
