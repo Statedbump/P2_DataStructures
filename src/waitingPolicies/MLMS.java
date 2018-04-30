@@ -7,11 +7,15 @@ import java.util.LinkedList;
 import customers.Customer;
 import customers.Server;
 
-//Multiple Lines Multiple Servers
+/**
+ * Multiple Lines Multiple Servers
+ * @author Kelvin García & Luis Cintrón
+ *
+ */
 public class MLMS {
 
 	int numOfServers, numOfCustomers; 
-	double totalTime = -1; // counts the current time of the simulation (begins in time 0)
+	long totalTime = -1; // counts the current time of the simulation (begins in time 0)
 	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
@@ -59,10 +63,6 @@ public class MLMS {
 				if(c.attending().getServiceTime()==0) {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
-					// set the waiting time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((int)totalTime-tr.getArrival());
-					// add the waiting time to the total Waiting time
-					totalWaitingTime=totalWaitingTime+tr.getTimeWaiting();
 					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
 				}
@@ -112,7 +112,7 @@ public class MLMS {
 			servers[index].add(waitingLine.removeFirst());
 		}
 	}
-
+	
 	/**
 	 * Returns a copy of the arriving customers
 	 * @param arrivingCustomers
@@ -135,7 +135,7 @@ public class MLMS {
 	 */
 	public double getAverageTime() {
 		// average time waited = total time waited / number of customers
-		return totalWaitingTime/numOfCustomers;
+		return (totalWaitingTime)/numOfCustomers;
 	}
 	
 	/**

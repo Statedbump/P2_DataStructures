@@ -135,7 +135,7 @@ public class MLMSBWT {
 	 */
 	public double getAverageTime() {
 		// average time waited = total time waited / number of customers
-		return totalWaitingTime/numOfCustomers;
+		return (totalWaitingTime+1)/numOfCustomers;
 	}
 
 	/**
