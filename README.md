@@ -18,7 +18,7 @@ From terminal: java -classpath ./bin main/Main
                - In addition, there must be a dataFiles.txt file containing the names of the files to be tested
           
           2. There is a directory under the name specified by the program ("outputFiles" by default) containing the
-          output files of the program
+             output files of the program
 
 From IDE: Run Main.java from the main package
 ### To Run Files Generator:
