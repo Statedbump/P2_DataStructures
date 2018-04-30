@@ -1,5 +1,5 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || 841141275
+//802142644 || StudentNumberHere
 //CIIC4020 - 030
 package main;
 import java.io.File;
@@ -9,8 +9,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 import java.util.Scanner;
-
-import simulationObjects.Customer;
+import customers.Customer;
 import waitingPolicies.MLMS;
 import waitingPolicies.MLMSBLL;
 import waitingPolicies.MLMSBWT;
@@ -70,7 +69,7 @@ public class Main {
 						MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
 						policy2.performService(); // performs service
 						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t\t" + 
-						formatter.format(policy2.getAvgWaitingTime())+"\t\t"+ policy2.calculateM()); // prints the output on its respective file
+						formatter.format(policy2.getAvgWaitingTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------"); 
@@ -80,7 +79,7 @@ public class Main {
 						MLMSBLL policy3= new MLMSBLL(list2,numOfServers); // creates the policy with its respective parameters
 						policy3.performService(); // performs service
 						out.println("MLMSBLL " + numOfServers+ ": " + policy3.getTotalTime()+ "\t\t" + 
-						formatter.format(policy3.getAvgWaitingTime())+ "\t\t"+ policy3.calculateM()); // prints the output on its respective file
+						formatter.format(policy3.getAvgWaitingTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------"); 
@@ -90,7 +89,7 @@ public class Main {
 						MLMSBWT policy4= new MLMSBWT(list2,numOfServers); // creates the policy with its respective parameters
 						policy4.performService(); // performs service
 						out.println("MLMSBWT " + numOfServers+ ": " + policy4.getTotalTime()+ "\t\t" + 
-						formatter.format(policy4.getAvgWaitingTime())+ "\t\t"+ policy4.calculateM()); // prints the output on its respective file
+						formatter.format(policy4.getAvgWaitingTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------");
@@ -123,7 +122,7 @@ public class Main {
 	}
 
 	/**
-	 * initializes the policy SLMS 
+	 * initializes the policy 
 	 * @param policy
 	 */
 	private static void initializePolicies(SLMS[]policy) {

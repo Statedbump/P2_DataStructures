@@ -1,7 +1,7 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || 841141275
+//802142644 || StudentNumberHere
 //CIIC4020 - 030
-package simulationObjects;
+package customers;
 /**
  * 
  * @author Kelvin García & Luis Cintron 
@@ -120,6 +120,13 @@ public class Customer {
 	}
 	
 	/**
+	 * resets the service time to its original value
+	 */
+	public void resetServiceTime() {
+		serviceTime = old;
+	}
+	
+	/**
 	 * increases the value of m
 	 */
 	public void increaseM() {
@@ -150,11 +157,7 @@ public class Customer {
 		this.waitingTime = currentTime - this.arrivalTime;
 		
 	}
-	
-	/**
-	 * resets the service time to its original value
-	 */
-	public long resetServiceTime(){
+	public long getOldServiceTime(){
 		return this.old;
 	}
 	

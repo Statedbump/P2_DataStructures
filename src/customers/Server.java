@@ -1,9 +1,9 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || 841141275
+//802142644 || StudentNumberHere
 //CIIC4020 - 030
-package simulationObjects;
+package customers;
 
-import implementations.SLLQueue;
+import implementations.LinkedQueue;
 
 
 /**
@@ -12,14 +12,14 @@ import implementations.SLLQueue;
  * @author Kelvin Garcia & Luis Cintrón
  */
 public class Server {
-	private SLLQueue<Customer> serverQueu;
+	private LinkedQueue<Customer> serverQueu;
 	private WaitingLine line;
 	long time;
 	/**
 	 * Server Constructor
 	 */
 	public Server(){
-		serverQueu = new SLLQueue<Customer>();
+		serverQueu = new LinkedQueue<Customer>();
 		this.line = new WaitingLine();
 	}
 

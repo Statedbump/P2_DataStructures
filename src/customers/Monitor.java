@@ -1,7 +1,7 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || 841141275
+//802142644 || StudentNumberHere
 //CIIC4020 - 030
-package simulationObjects;
+package customers;
 
 /**
  * Class to manage the transfer of customers between lines according
@@ -28,6 +28,8 @@ public class Monitor {
 	 * where the value at 0 is the line with the greatest size and the value 1 is the 
 	 * line with the smallest size
 	 */
+	
+	
 	private int indexOfLargestLine() {
 		Server s = servers[0];
 		int index = 0;
@@ -52,6 +54,8 @@ public class Monitor {
 		}
 		return indexOfSmallest;
 	}
+	
+	
 	
 	/**
 	 * transfer the customers among lines, if needed, following an MLMS policy

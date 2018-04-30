@@ -1,26 +1,23 @@
 //Kelvin Garcia Muñiz || Luis Cintrón Zayas
-//802142644 || 841141275
+//802142644 || StudentNumberHere
 //CIIC4020 - 030
 package waitingPolicies;
 
 import java.util.LinkedList;
-
-import implementations.SLLQueue;
-import simulationObjects.Customer;
-import simulationObjects.Monitor;
-import simulationObjects.Server;
+import customers.Customer;
+import customers.Monitor;
+import customers.Server;
+import implementations.LinkedQueue;
 
 //Multiple Lines Multiple Servers with Balanced Line Length
 public class MLMSBLL {
 
 	int numOfServers, numOfCustomers; 
 	long totalTime = -1; // counts the current time of the simulation (begins in time 0)
+	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
-
-	private SLLQueue<Customer> serviceCompleted;
-	private LinkedList<Customer> arrivalOrder; // this list at the end will have all customers in order of arriving time
-
+	private LinkedQueue<Customer> serviceCompleted;
 	private Server[]servers; // array of servers
 
 	/**
@@ -34,10 +31,7 @@ public class MLMSBLL {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
-
-		this.serviceCompleted = new SLLQueue<>();
-		this.arrivalOrder = new LinkedList<>();
-
+		serviceCompleted = new LinkedQueue<>();
 		initializeServers(); // run the server init with the specified number	
 	}
 
@@ -72,7 +66,6 @@ public class MLMSBLL {
 					// set the time when the customer left
 					tr.setDeparture((long) totalTime);
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((tr.getDeparture() - tr.getArrival() - (tr.resetServiceTime()-1)));
 					// add the the costumer to the serviceCompletedqueue
 					this.serviceCompleted.enqueue(tr);
 					// remove the customer from the arriving customers line
@@ -97,7 +90,6 @@ public class MLMSBLL {
 				if(c.getArrival()==totalTime) {
 					// add that customer to the waiting line
 					waitingLine.add(c);
-					arrivalOrder.add(c);
 				}
 			}
 			// add the customer to a server with fewer customers
@@ -160,40 +152,12 @@ public class MLMSBLL {
 	 */
 	public double getAvgWaitingTime() {
 		double avgWaitingTime = 0.0;
-
-	SLLQueue<Customer> serviceCompletedCopy = this.copyOfServiceCompletedQueue();
-		while(!serviceCompletedCopy.isEmpty()) {
-			Customer c = serviceCompletedCopy.dequeue();
-
-			avgWaitingTime= avgWaitingTime+(c.getTimeWaiting());
+		while(!serviceCompleted.isEmpty()) {
+			Customer c = serviceCompleted.dequeue();
+			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
 		}
 		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
 		return avgWaitingTime;
-	}
-	
-	/**
-	 * returns a copy of the service completed queue for computational purposes
-	 * @return
-	 */
-	private SLLQueue<Customer> copyOfServiceCompletedQueue(){
-		SLLQueue<Customer> copy = new SLLQueue<>();
-		
-		int j = 0;
-		while(!(j==this.serviceCompleted.size())) {
-			
-			Customer c = serviceCompleted.dequeue();
-			Customer cCopy = new Customer(c.getArrival(), c.resetServiceTime());
-			
-			cCopy.setDeparture(c.getDeparture());
-			cCopy.setTimeWaiting(c.getTimeWaiting());
-			serviceCompleted.enqueue(c);
-			copy.enqueue(cCopy);
-			j++;
-			
-		}
-		
-		return copy;
-
 	}
 
 	/**
@@ -218,24 +182,5 @@ public class MLMSBLL {
 	 */
 	public boolean isEmpty() {
 		return arrivingCustomers.isEmpty();
-	}
-	public double calculateM() {
-		int count = 0;
-		double m = 0.00;
-		for(Customer c: arrivalOrder) {
-			
-			for(int i = 0 ; i < serviceCompleted.size();i++) {
-				Customer c2 =  serviceCompleted.dequeue();
-				if(c2.getArrival()>c.getArrival() && c2.getTimeWaiting()<c.getTimeWaiting()) {
-					count ++;
-				}
-				serviceCompleted.enqueue(c2);
-			}
-			m = count/this.numOfCustomers;
-			
-		}
-		return m;
-		
-		
 	}
 }
