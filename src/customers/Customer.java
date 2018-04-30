@@ -157,6 +157,9 @@ public class Customer {
 		this.waitingTime = currentTime - this.arrivalTime;
 		
 	}
+	public long getOldServiceTime(){
+		return this.old;
+	}
 	
 }
 

@@ -51,9 +51,10 @@ public class MLMS {
 		//for each server c 
 		for(Server c: servers) {
 			// if there are servers in line
-			
+
 			if(c.isServing()) {
 				// if the servers has not finished with the customer
+				
 				
 				if(c.attending().getServiceTime()!=0) {
 					// remove one unit of time from the service time
@@ -67,6 +68,8 @@ public class MLMS {
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
 					
+					tr.setDeparture((long) totalTime);
+					System.out.println("Costumer  "+ tr.getArrival() + " "+ tr.getOldServiceTime() +"was serverd by server"+ " left at Time" + totalTime);
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
 					
 					
@@ -178,13 +181,12 @@ public class MLMS {
 		return arrivingCustomers.isEmpty();
 	}
 	public double getAvgWaitingTime() {
-		int n = this.serviceCompleted.size();
 		double avgWaitingTime = 0.0;
 		while(!serviceCompleted.isEmpty()) {
 			Customer c = serviceCompleted.dequeue();
-			avgWaitingTime= avgWaitingTime+c.getTimeWaiting();
+			avgWaitingTime= avgWaitingTime+((c.getDeparture() - c.getArrival())-(c.getOldServiceTime()-1));
 		}
-		avgWaitingTime = avgWaitingTime/n;
+		avgWaitingTime = avgWaitingTime/this.numOfCustomers;
 		return avgWaitingTime;
 	}
 }

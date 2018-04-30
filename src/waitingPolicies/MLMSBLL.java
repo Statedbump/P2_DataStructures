@@ -53,7 +53,6 @@ public class MLMSBLL {
 
 			if(c.isServing()) {
 				// if the servers has not finished with the customer
-
 				if(c.attending().getServiceTime()!=0) {
 					// remove one unit of time from the service time
 					c.attending().setServiceTime(c.attending().getServiceTime()-1);
@@ -62,17 +61,11 @@ public class MLMSBLL {
 				}
 				// if the server finished serving the customer
 				if(c.attending().getServiceTime()==0) {
-
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
-
 					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
-
-
 					// add the the costumer to the serviceCompletedqueue
-
 					this.serviceCompleted.enqueue(tr);
-
 					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
 
@@ -124,10 +117,12 @@ public class MLMSBLL {
 		// if there are customers in line
 		if(!waitingLine.isEmpty()){
 			if(servers[index].isServing()){
+				
 				servers[index].getLineOfServer().add(waitingLine.removeFirst());
+				
 			}else {
 				Customer c = waitingLine.removeFirst();
-				//c.setTimeWaiting((long) (totalTime - c.getArrival()));
+				//
 				servers[index].add(c);
 			}
 		}
