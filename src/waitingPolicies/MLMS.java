@@ -6,6 +6,7 @@ package waitingPolicies;
 import java.util.LinkedList;
 import customers.Customer;
 import customers.Server;
+import implementations.LinkedQueue;
 
 //Multiple Lines Multiple Servers
 public class MLMS {
@@ -15,6 +16,7 @@ public class MLMS {
 	private double totalWaitingTime = 0; //total time waited by each customer 
 	private LinkedList<Customer> arrivingCustomers; // customers to served
 	private LinkedList<Customer> waitingLine; // lists of customers waiting in line
+	private LinkedQueue<Customer> serviceCompleted;
 	private Server[]servers; // array of servers
 
 	/**
@@ -28,6 +30,7 @@ public class MLMS {
 		this.numOfServers=numberOfServers;
 		this.servers=new Server[numberOfServers];
 		this.waitingLine=new LinkedList<>();
+		serviceCompleted = new LinkedQueue<>();
 		initializeServers(); // run the server init with the specified number	
 	}
 	
@@ -44,11 +47,18 @@ public class MLMS {
 	 * performs the service with a MLMS waiting policy
 	 */
 	public void Service() {
+		
+		
+		
+		
+		
 		//for each server c 
 		for(Server c: servers) {
 			// if there are servers in line
-			if(c.lineLength()!=0) {
+			
+			if(c.isServing()) {
 				// if the servers has not finished with the customer
+				
 				if(c.attending().getServiceTime()!=0) {
 					// remove one unit of time from the service time
 					c.attending().setServiceTime(c.attending().getServiceTime()-1);
@@ -57,12 +67,17 @@ public class MLMS {
 				}
 				// if the server finished serving the customer
 				if(c.attending().getServiceTime()==0) {
+					
 					//move on to the next customer (tr is customer already served)
 					Customer tr=c.nextCustomer();
-					// set the waiting time (= current time - the arrival time of that customer)
-					tr.setTimeWaiting((int)totalTime-tr.getArrival());
-					// add the waiting time to the total Waiting time
-					totalWaitingTime=totalWaitingTime+tr.getTimeWaiting();
+					
+					// set the waiting of the costumer that is next in line time (= current time - the arrival time of that customer)
+					
+					
+					// add the the costumer to the serviceCompletedqueue
+					
+						this.serviceCompleted.enqueue(tr);
+					
 					// remove the customer from the arriving customers line
 					arrivingCustomers.remove(tr);
 				}
@@ -108,8 +123,13 @@ public class MLMS {
 		}
 		// if there are customers in line
 		if(!waitingLine.isEmpty()){
-			//add that customer to the server with fewest people in line
-			servers[index].add(waitingLine.removeFirst());
+			if(servers[index].isServing()){
+				servers[index].getLineOfServer().add(waitingLine.removeFirst());
+			}else {
+			Customer c = waitingLine.removeFirst();
+			//c.setTimeWaiting((long) (totalTime - c.getArrival()));
+			servers[index].add(c);
+			}
 		}
 	}
 
@@ -160,5 +180,15 @@ public class MLMS {
 	 */
 	public boolean isEmpty() {
 		return arrivingCustomers.isEmpty();
+	}
+	public double getAvgWaitingTime() {
+		int n = this.serviceCompleted.size();
+		double avgWaitingTime = 0.0;
+		while(!serviceCompleted.isEmpty()) {
+			Customer c = serviceCompleted.dequeue();
+			avgWaitingTime= avgWaitingTime+c.getTimeWaiting();
+		}
+		avgWaitingTime = avgWaitingTime/n;
+		return avgWaitingTime;
 	}
 }

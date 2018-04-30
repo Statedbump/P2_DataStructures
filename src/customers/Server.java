@@ -2,7 +2,8 @@
 //802142644 || StudentNumberHere
 //CIIC4020 - 030
 package customers;
-import implementations.LinkedDeque;
+
+import implementations.LinkedQueue;
 
 
 /**
@@ -11,13 +12,15 @@ import implementations.LinkedDeque;
  * @author Kelvin Garcia & Luis Cintrón
  */
 public class Server {
-	private LinkedDeque<Customer> lineQueue;
+	private LinkedQueue<Customer> serverQueu;
+	private WaitingLine line;
 	long time;
 	/**
 	 * Server Constructor
 	 */
 	public Server(){
-		lineQueue = new LinkedDeque<Customer>();
+		serverQueu = new LinkedQueue<Customer>();
+		this.line = new WaitingLine();
 	}
 
 	/**
@@ -25,7 +28,7 @@ public class Server {
 	 * @return
 	 */
 	public boolean isServing(){
-		return lineQueue.size()>0;
+		return serverQueu.size()==1;
 	}
 
 	/**
@@ -33,7 +36,12 @@ public class Server {
 	 * @param client
 	 */
 	public void add(Customer client){
-		lineQueue.addLast(client);
+		// when working with MLMS type lines if the server is attending a costumer
+		//the the arriving customer will be sent to the line 
+		// if not the server will attend the client immediately
+	
+		serverQueu.enqueue(client);;
+		
 	}
 
 	/**
@@ -41,7 +49,7 @@ public class Server {
 	 * @return
 	 */
 	public Customer attending(){
-		return lineQueue.first();
+		return serverQueu.first();
 	}
 
 	/**
@@ -49,7 +57,11 @@ public class Server {
 	 * @return
 	 */
 	public Customer nextCustomer(){
-		return lineQueue.removeFirst();
+		Customer c = serverQueu.dequeue();
+		if(!line.isEmpty()) {
+			this.add(line.next());
+		}
+		return c ;
 	}
 
 	/**
@@ -57,7 +69,7 @@ public class Server {
 	 * @return
 	 */
 	public int lineLength(){
-		return lineQueue.size();
+		return this.serverQueu.size()+line.lineLength();
 	}
 
 	/**
@@ -65,7 +77,7 @@ public class Server {
 	 * @return
 	 */
 	public boolean isEmpty(){
-		return !lineQueue.isEmpty();
+		return serverQueu.isEmpty();
 	}
 
 	/**
@@ -73,10 +85,12 @@ public class Server {
 	 * @return
 	 */
 	public Customer peekFirstInLine(){
-		return lineQueue.first();
+		
+		return serverQueu.first();
+		
 	}
 	public Customer customerToTransfer() {
-		return lineQueue.removeLast();
+		return line.CusToTransfer();
 	}
 
 	/**
@@ -93,5 +107,8 @@ public class Server {
 	 */
 	public long getWaitingCustTime() {
 		return time;
+	}
+	public WaitingLine getLineOfServer() {
+		return line;
 	}
 }

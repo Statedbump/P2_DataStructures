@@ -68,7 +68,7 @@ public class Main {
 						MLMS policy2= new MLMS(list2,numOfServers); // creates the policy with its respective parameters
 						policy2.performService(); // performs service
 						out.println("MLMS " + numOfServers+ ": " + policy2.getTotalTime()+ "\t\t" + 
-						formatter.format(policy2.getAverageTime())); // prints the output on its respective file
+						formatter.format(policy2.getAvgWaitingTime())); // prints the output on its respective file
 						numOfServers+=2; //increase the number of servers by 2
 					}
 					out.println("-----------------------------------"); 

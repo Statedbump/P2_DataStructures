@@ -40,7 +40,7 @@ public class WaitingLine {
 	 * returns the number of customer in the line
 	 * @return
 	 */
-	public int numOfCustomersWaiting() {
+	public int lineLength() {
 		return this.line.size();
 	}
 	
@@ -58,6 +58,9 @@ public class WaitingLine {
 	 */
 	public Customer next() {
 		return this.line.removeFirst();
+	}
+	public Customer CusToTransfer() {
+		return line.removeLast();
 	}
 	
 	/**
