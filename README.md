@@ -1,29 +1,27 @@
 # Project-2-Data-Structures
-## Kelvin Garcia Muñiz
-## 802142644
+## Kelvin Garcia Muñiz | Luis M. Cintrón Zayas
+## 802142644 | 841141275
 ## CIIC4020 - 030
 
 ## To Run the Program:
 Before executing any of these commands from the CMD or Terminal make sure you are in the correct directory path. If using Eclipse or a 
 similar IDE, these procedures may not be required.
-### To Run Part 1:
-From terminal: java -classpath ./bin  p1MainClasses/Part1Main n
-     
-     Where:
-     
-       n = 1
-           execute Part 1 P1
-       n = 2
-           execute Part 1 P2
-       n = 3
-           execute Part 1 P3
-       n = 4
-           execute Part 1 P4
-           
-       If no n is given, then the program will execute all 4 strategies
+### To Run Main Program:
+From terminal: java -classpath ./bin main/Main
+    
+       This command will execute the Main.java class and output files according to the data gotten from the input files.
+       
+       The execution of the program will be successful if the following conditions are satisfied:
+       
+          1. There is a directory under the name specified by the program ("inputFiles" by default)
+         
+               - In addition, there must be a dataFiles.txt file containing the names of the files to be tested
+          
+          2. There is a directory under the name specified by the program ("outputFiles" by default) containing the
+          output files of the program
 
-From IDE: Run Part1Main.java from the p1MainClasses package
-### To Run Part 2:
+From IDE: Run Main.java from the main package
+### To Run Files Generator:
 From terminal: java -classpath ./bin  p1MainClasses/Part2Main  n  m  isize  fsize  istep  rep
 
     Where:
